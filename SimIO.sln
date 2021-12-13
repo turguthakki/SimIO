@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libSimIO", "libsimio\libSimIO.csproj", "{C58A167A-5892-4B06-969A-42421155508C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D4556C26-B998-4333-AE4F-9D18488C8F98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "input_test", "tests\input_test\input_test.csproj", "{C95B3B75-BFCE-4020-920A-0A20E6AB7036}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C58A167A-5892-4B06-969A-42421155508C}.Debug|x64.ActiveCfg = Debug|x64
+		{C58A167A-5892-4B06-969A-42421155508C}.Debug|x64.Build.0 = Debug|x64
+		{C58A167A-5892-4B06-969A-42421155508C}.Release|x64.ActiveCfg = Release|x64
+		{C58A167A-5892-4B06-969A-42421155508C}.Release|x64.Build.0 = Release|x64
+		{C95B3B75-BFCE-4020-920A-0A20E6AB7036}.Debug|x64.ActiveCfg = Debug|x64
+		{C95B3B75-BFCE-4020-920A-0A20E6AB7036}.Debug|x64.Build.0 = Debug|x64
+		{C95B3B75-BFCE-4020-920A-0A20E6AB7036}.Release|x64.ActiveCfg = Release|x64
+		{C95B3B75-BFCE-4020-920A-0A20E6AB7036}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C95B3B75-BFCE-4020-920A-0A20E6AB7036} = {D4556C26-B998-4333-AE4F-9D18488C8F98}
+	EndGlobalSection
+EndGlobal
