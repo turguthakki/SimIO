@@ -83,7 +83,7 @@ public partial class SendInputKeyboard : OutputDevice
   protected SendInputKeyboardElement[] _elements;
 
   // -------------------------------------------------------------------------
-  public string deviceIdentifier => "Keyboard";
+  public string deviceIdentifier => "sendinput:keyboard";
 
   // -------------------------------------------------------------------------
   public Type deviceType => typeof(InputDevice.DeviceType.Keyboard);

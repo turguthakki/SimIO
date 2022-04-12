@@ -63,6 +63,8 @@ public class SimIO
   {
     RawInputDevice.init();
     SendInput.init();
+    VJoy.init();
+    update();
   }
 
   // -------------------------------------------------------------------------

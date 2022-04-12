@@ -1,6 +1,6 @@
-﻿/* ----------------------------------------------------------------------- *
+/* ----------------------------------------------------------------------- *
 
-    * OutputTest.cs
+    * VJoy.cs
 
     ----------------------------------------------------------------------
 
@@ -27,47 +27,24 @@
     Turgut Hakkı Özdemir <turgut.hakki@gmail.com>
 
 * ------------------------------------------------------------------------ */
-global using System;
-global using System.Collections;
-global using System.Collections.Generic;
-global using System.Linq;
-global using System.Runtime.InteropServices;
-global using th.simio;
-global using static th.simio.User32;
-global using static th.simio.Kernel32;
+using vJoyInterfaceWrap;
 
-namespace th {
+namespace th.simio {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-public class OutputTest
+public class VJoy
 {
+
   // -------------------------------------------------------------------------
-  static void Main()
+  internal static void init()
   {
-    // InputDevice joystick = SimIO.inputDevices.First(d => d is RawInputHID && (d as RawInputHID).productString == "Saitek X52 Flight Control System");
-    InputDevice joystick = SimIO.inputDevices.First();
-    OutputDevice vJoy = SimIO.outputDevices.First(d => d is vJoyDevice);
-
-    foreach(var i in joystick.elements) {
-      var id = i.id as HidIdentifier;
-      var outE = vJoy.elements.FirstOrDefault(e => (e.id as HidIdentifier).usagePage == id.usagePage && (e.id as HidIdentifier).usage == id.usage);
-
-      if (outE is not null) {
-        i.onInput += (d, e) => {
-          outE.value = i.value * outE.maximumValue;
-        };
-      }
+    vJoy vj = new vJoy();
+    for (uint i = 0; i < 16; i++) {
+      if (vj.GetVJDStatus(i) == VjdStat.VJD_STAT_OWN || vj.AcquireVJD(i))
+        registerOutputDevice(new vJoyDevice(vj, i));
     }
-
-
-    bool running = true;
-    while(running) {
-      SimIO.update();
-      Thread.Sleep(16);
-    }
-
-    Console.WriteLine("Ok");
   }
+
 }
 
-} // End of namespace th
+} // End of namespace th.simio

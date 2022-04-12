@@ -6,6 +6,19 @@
     <Nullable>disable</Nullable>
     <Platforms>x64</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <BuildDependsOn>
+      AfterBuild
+    </BuildDependsOn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="vJoyInterfaceWrap">
+      <HintPath>vJoy/vJoyInterfaceWrap.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="CopyDLL" AfterTargets="Build">
+    <Copy SourceFiles="$(ProjectDir)\vJoy\vJoyInterface.dll" DestinationFolder="$(ProjectDir)$(OutDir)" SkipUnchangedFiles="false" />
+  </Target>
 
 </Project>

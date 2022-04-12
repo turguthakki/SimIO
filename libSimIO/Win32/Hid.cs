@@ -149,7 +149,7 @@ public static class Hid
 
   // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/hidsdi/nf-hidsdi-hidd_getproductstring
   [DllImport("Hid.dll", SetLastError = true)]
-  [return : MarshalAs(UnmanagedType.Bool)] public static extern bool HidD_GetProductString(IntPtr HidDeviceObject, [Out] IntPtr Buffer, UInt32  BufferLength);
+  [return : MarshalAs(UnmanagedType.Bool)] public static extern bool HidD_GetProductString(IntPtr HidDeviceObject, IntPtr Buffer, UInt32  BufferLength);
 
   // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/hidsdi/nf-hidsdi-hidd_getmanufacturerstring
   [DllImport("Hid.dll", SetLastError = true)]

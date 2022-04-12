@@ -87,7 +87,7 @@ public class SendInputMouse : OutputDevice
   SendInputMouseElement yPosition;
 
   // -------------------------------------------------------------------------
-  public string deviceIdentifier => "Mouse";
+  public string deviceIdentifier => "sendinput:mouse";
 
   // -------------------------------------------------------------------------
   public Type deviceType => typeof(InputDevice.DeviceType.Mouse);

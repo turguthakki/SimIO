@@ -12,4 +12,8 @@
     <Platforms>x64</Platforms>
   </PropertyGroup>
 
+  <Target Name="CopyDLL" AfterTargets="Build">
+    <Copy SourceFiles="$(SolutionDir)libSimIO\vJoy\vJoyInterface.dll" DestinationFolder="$(ProjectDir)$(OutDir)" SkipUnchangedFiles="false" />
+  </Target>
+
 </Project>

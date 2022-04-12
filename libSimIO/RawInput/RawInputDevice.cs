@@ -74,15 +74,23 @@ public abstract partial class RawInputDevice : InputDevice
 
     // Strings
     {
-      IntPtr fileHandle = CreateFile(devicePath, (deviceInfo.dwType == RIM_TYPEHID) ? (GENERIC_READ | GENERIC_WRITE) : 0, FILE_SHARE_READ | FILE_SHARE_WRITE, IntPtr.Zero, OPEN_EXISTING, 0, IntPtr.Zero);
+      IntPtr fileHandle = CreateFile(devicePath.Substring(9), (deviceInfo.dwType == RIM_TYPEHID) ? (GENERIC_READ | GENERIC_WRITE) : 0, FILE_SHARE_READ | FILE_SHARE_WRITE, IntPtr.Zero, OPEN_EXISTING, 0, IntPtr.Zero);
 
       IntPtr stringBuffer = Marshal.AllocHGlobal((126 + 1) * 2);
 
-      HidD_GetManufacturerString(fileHandle, stringBuffer, 126 * 2);
-      manufacturerString = Marshal.PtrToStringUni(stringBuffer);
+      unsafe {
+        for (int i = 0; i < ((126 + 1) *  2); i++) {
+          ((byte *)stringBuffer.ToPointer())[i] = 0;
+        }
+      }
 
-      HidD_GetProductString(fileHandle, stringBuffer, 126 * 2);
-      productString = Marshal.PtrToStringUni(stringBuffer);
+      if (HidD_GetManufacturerString(fileHandle, stringBuffer, 126 * 2)) {
+        manufacturerString = Marshal.PtrToStringUni(stringBuffer);
+      }
+
+      if (HidD_GetProductString(fileHandle, stringBuffer, 126 * 2)) {
+        productString = Marshal.PtrToStringUni(stringBuffer);
+      }
 
       Marshal.FreeHGlobal(stringBuffer);
       CloseHandle(fileHandle);
