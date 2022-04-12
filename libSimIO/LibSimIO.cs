@@ -48,22 +48,38 @@ public class SimIO
   public static event InputNotification onInput = delegate {};
 
   // -------------------------------------------------------------------------
-  public static IEnumerable<InputDevice> inputDevices => _devices;
-  static List<InputDevice> _devices = new List<InputDevice>();
+  public static event OutputDeviceAttachmentNotification outputDevicesChanged = delegate {};
+
+  // -------------------------------------------------------------------------
+  public static IEnumerable<InputDevice> inputDevices => _inputDevices;
+  static List<InputDevice> _inputDevices = new List<InputDevice>();
+
+  // -------------------------------------------------------------------------
+  public static IEnumerable<OutputDevice> outputDevices => _outputDevices;
+  static List<OutputDevice> _outputDevices = new List<OutputDevice>();
 
   // -------------------------------------------------------------------------
   static SimIO()
   {
     RawInputDevice.init();
+    SendInput.init();
   }
 
   // -------------------------------------------------------------------------
   internal static void registerInputDevice(InputDevice device)
   {
-    _devices.Add(device);
+    _inputDevices.Add(device);
     device.attachmentNotification += (d) => inputDevicesChanged(d);
     device.onInput += (d, e) => onInput(d, e);
     inputDevicesChanged(device);
+  }
+
+  // -------------------------------------------------------------------------
+  internal static void registerOutputDevice(OutputDevice device)
+  {
+    _outputDevices.Add(device);
+    device.attachmentNotification += (d) => outputDevicesChanged(d);
+    outputDevicesChanged(device);
   }
 
   // -------------------------------------------------------------------------

@@ -227,7 +227,6 @@ public class RawInputHID : RawInputDevice
       elem.onInput += (d, e) => notifyInput(d, e);
     }
     _elements = elements.ToArray();
-    Console.WriteLine(_elements.Length);
   }
 
   // -------------------------------------------------------------------------

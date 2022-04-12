@@ -46,18 +46,18 @@ public static class User32
     public int cbSize = Marshal.SizeOf(typeof(WNDCLASSEX));
     [MarshalAs(UnmanagedType.U4)]
     public int style = 0;
-    public IntPtr lpfnWndProc;
-    public int cbClsExtra;
-    public int cbWndExtra;
-    public IntPtr hInstance;
-    public IntPtr hIcon;
-    public IntPtr hCursor;
-    public IntPtr hbrBackground;
+    public IntPtr lpfnWndProc = IntPtr.Zero;
+    public int cbClsExtra = 0;
+    public int cbWndExtra = 0;
+    public IntPtr hInstance = IntPtr.Zero;
+    public IntPtr hIcon = IntPtr.Zero;
+    public IntPtr hCursor = IntPtr.Zero;
+    public IntPtr hbrBackground = IntPtr.Zero;
     [MarshalAs(UnmanagedType.LPWStr)]
-    public string lpszMenuName;
+    public string lpszMenuName = null;
     [MarshalAs(UnmanagedType.LPWStr)]
-    public string lpszClassName;
-    public IntPtr hIconSm;
+    public string lpszClassName = null;
+    public IntPtr hIconSm = IntPtr.Zero;
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -202,6 +202,50 @@ public static class User32
     [FieldOffset(24)] public RAWHID hid;
   };
 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-keybdinput
+  [StructLayout(LayoutKind.Sequential)]
+  public struct KEYBDINPUT
+  {
+    public UInt16 wVk = 0;
+    public UInt16 wScan = 0;
+    public UInt32 dwFlags = 0;
+    public UInt32 time = 0;
+    public IntPtr dwExtraInfo = IntPtr.Zero;
+  };
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-mouseinput
+  [StructLayout(LayoutKind.Sequential)]
+  public struct MOUSEINPUT
+  {
+    public Int32 dx = 0;
+    public Int32 dy = 0;
+    public UInt32 mouseData = 0;
+    public UInt32 dwFlags = 0;
+    public UInt32 time = 0;
+    public IntPtr dwExtraInfo = IntPtr.Zero;
+  };
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-input
+  [StructLayout(LayoutKind.Explicit)]
+  public struct INPUT
+  {
+    [FieldOffset(0)] public UInt32 type;
+    [FieldOffset(8)] public KEYBDINPUT ki;
+    [FieldOffset(8)] public MOUSEINPUT mi;
+  }
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // https://docs.microsoft.com/en-us/previous-versions/dd162805(v=vs.85)
+  [StructLayout(LayoutKind.Sequential)]
+  public struct POINT
+  {
+    public Int32 x;
+    public Int32 y;
+  };
+
   // -------------------------------------------------------------------------
   public static readonly IntPtr nullptr = IntPtr.Zero;
 
@@ -282,6 +326,8 @@ public static class User32
   public const ushort RI_KEY_E1 =  4;
 
   // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics
+  public const int SM_XVIRTUALSCREEN = 76;
+  public const int SM_YVIRTUALSCREEN = 77;
   public const int SM_CXVIRTUALSCREEN = 78;
   public const int SM_CYVIRTUALSCREEN = 79;
   public const int SM_CXSCREEN = 0;
@@ -290,6 +336,40 @@ public static class User32
   // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfow
   public const int SPI_GETMOUSESPEED = 0x0070;
   public const int SPI_GETMOUSE = 0x0003;
+
+  // https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-input
+  public const UInt32 INPUT_MOUSE = 0;
+  public const UInt32 INPUT_KEYBOARD = 1;
+  public const UInt32 INPUT_HARDWARE = 2;
+
+  // https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-keybdinput
+  public const UInt32 KEYEVENTF_EXTENDEDKEY = 0x0001;
+  public const UInt32 KEYEVENTF_KEYUP = 0x0002;
+  public const UInt32 KEYEVENTF_SCANCODE = 0x0008;
+  public const UInt32 KEYEVENTF_UNICODE = 0x0004;
+
+  // https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-mouseinput
+  public const UInt32 MOUSEEVENTF_MOVE = 0x0001;
+  public const UInt32 MOUSEEVENTF_LEFTDOWN = 0x0002;
+  public const UInt32 MOUSEEVENTF_LEFTUP = 0x0004;
+  public const UInt32 MOUSEEVENTF_RIGHTDOWN = 0x0008;
+  public const UInt32 MOUSEEVENTF_RIGHTUP = 0x0010;
+  public const UInt32 MOUSEEVENTF_MIDDLEDOWN = 0x0020;
+  public const UInt32 MOUSEEVENTF_MIDDLEUP = 0x0040;
+  public const UInt32 MOUSEEVENTF_XDOWN = 0x0080;
+  public const UInt32 MOUSEEVENTF_XUP = 0x0100;
+  public const UInt32 MOUSEEVENTF_WHEEL = 0x0800;
+  public const UInt32 MOUSEEVENTF_HWHEEL = 0x1000;
+  public const UInt32 MOUSEEVENTF_MOVE_NOCOALESCE = 0x2000;
+  public const UInt32 MOUSEEVENTF_VIRTUALDESK = 0x4000;
+  public const UInt32 MOUSEEVENTF_ABSOLUTE = 0x8000;
+
+  // https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes?redirectedfrom=MSDN
+  public const int VK_LBUTTON = 0x01;
+  public const int VK_RBUTTON = 0x02;
+  public const int VK_MBUTTON = 0x04;
+  public const int VK_XBUTTON1 = 0x05;
+  public const int VK_XBUTTON2 = 0x06;
 
   // -------------------------------------------------------------------------
   // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerclassexw
@@ -359,6 +439,24 @@ public static class User32
   // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfow
   [DllImport("user32.dll", SetLastError = true, EntryPoint = "SystemParametersInfoW")]
   [return: MarshalAs(UnmanagedType.Bool)] public static extern bool SystemParametersInfo(uint uiAction, uint uiParam, [In, Out] IntPtr pvParam, uint fWinIni);
+
+  // -------------------------------------------------------------------------
+  // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendinput
+  [DllImport("user32.dll", SetLastError = true, EntryPoint = "SendInput")]
+  public static extern int SendInput(int cInputs, [In] INPUT[] pInputs, int cbSize);
+
+  // ---------------------------------------------------------------------------
+  // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getmessageextrainfo
+  [DllImport("user32.dll", SetLastError = true, EntryPoint = "GetMessageExtraInfo")]
+  public static extern IntPtr GetMessageExtraInfo();
+
+  // ---------------------------------------------------------------------------
+  // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getcursorpos
+  [DllImport("user32.dll", SetLastError = true, EntryPoint = "GetCursorPos")]
+  [return : MarshalAs(UnmanagedType.Bool)] public static extern bool GetCursorPos([In, Out] ref POINT lpPoint);
+
+  [DllImport("user32.dll", SetLastError = true, EntryPoint = "GetKeyState")]
+  public static extern short GetKeyState(int nVirtKey);
 }
 
 } // End of namespace th.simio
