@@ -59,7 +59,7 @@ public class HidIdentifier : ElementIdentifier
   /// <param name="usage">Hid usage</param>
   /// <param name="name">Debug string</param>
   /// <returns></returns>
-  public HidIdentifier(Type type, HidUsage.UsagePage usagePage, HidUsage.Usage usage, string name) : base(type, name)
+  public HidIdentifier(Type type, HidUsage.UsagePage usagePage, HidUsage.Usage usage, string name = "") : base(type, name)
   {
     this.usagePage = usagePage;
     this.usage = usage;
@@ -100,7 +100,7 @@ public class HidIdentifier : ElementIdentifier
     if (ki is null)
       return false;
 
-    return usagePage == ki.usagePage && usage == ki.usage;
+    return type == ki.type && usagePage == ki.usagePage && usage == ki.usage;
   }
 }
 

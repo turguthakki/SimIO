@@ -117,6 +117,10 @@ public class ElementIdentifier : IEquatable<ElementIdentifier>
   {
     return (this is null == rh is null) && (this is not null && rh is not null ? GetType() == rh.GetType() && type == rh.type && System.Object.ReferenceEquals(this, rh) : false);
   }
+
+  public static bool operator == (ElementIdentifier a, ElementIdentifier b) => a.Equals(b);
+  public static bool operator != (ElementIdentifier a, ElementIdentifier b) => !a.Equals(b);
+
 }
 
 } // End of namespace th.simio
