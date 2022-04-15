@@ -34,23 +34,75 @@ namespace th.simio {
 public partial interface InputDevice
 {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /// <summary>
+  /// Input element.
+  /// Interface for a physical input element on the device such as mouse wheel, x or y axis or a button.
+  /// </summary>
   public interface Element
   {
+    /// <summary>
+    /// Input device
+    /// </summary>
     InputDevice device {get;}
+
+    /// <summary>
+    /// Identifier.
+    /// Used to identify whan an element is used for such as Keyboard.enter
+    /// </summary>
     ElementIdentifier id {get;}
 
+    /// <summary>
+    /// Indicates if the element is cyclic. A cyclic input element reports an absolute value but can cycle like a mouse wheel.
+    /// </summary>
     bool isCyclic {get;}
+
+    /// <summary>
+    /// Indicates if element reports relative values such as mouse axes.
+    /// Relative elements does not report a position value
+    /// </summary>
     bool isRelative {get;}
+
+    /// <summary>
+    /// Indicates if element reports absolute values such as joystick axes or buttons or keyboard keys
+    /// </summary>
     bool isAbsolute {get;}
 
+    /// <summary>
+    /// Minimum value.
+    /// On relative elements, minimum and maximum values has no meaning and is usually zero.
+    /// </summary>
     float minimumValue {get;}
+
+    /// <summary>
+    /// Maximum value.
+    /// On relative elements, minimum and maximum values has no meaning and is usually zero.
+    /// </summary>
     float maximumValue {get;}
 
+    /// <summary>
+    /// Indicates if the values of value, position and motion variables have valid values.
+    /// As an example a pov hat reports invalid values when user is not interacting with it.
+    /// </summary>
     bool isValid => true;
+
+    /// <summary>
+    /// Depending on if the element is relative or absolute returns same value as position or motion
+    /// </summary>
     float value {get;}
+
+    /// <summary>
+    /// Returns absolute position value
+    /// </summary>
     float position {get;}
+
+    /// <summary>
+    /// Returns relative motion value
+    /// </summary>
     float motion {get;}
 
+    /// <summary>
+    /// Fired when an input occures on this element
+    /// </summary>
     event InputNotification onInput;
   }
 }

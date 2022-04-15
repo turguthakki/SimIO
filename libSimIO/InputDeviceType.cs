@@ -38,13 +38,38 @@ namespace th.simio {
 public partial interface InputDevice
 {
   // -------------------------------------------------------------------------
+  /// <summary>
+  /// Descriptor type for hardware type
+  /// </summary>
   public interface DeviceType {
+    /// <summary>
+    /// Used for queries
+    /// </summary>
     public interface DontCare : DeviceType {};
+
+    /// <summary>
+    /// Keyboard
+    /// </summary>
     public interface Keyboard : DeviceType {};
+
+    /// <summary>
+    /// Pointer device. Eg: Mouse or Touch
+    /// </summary>
     public interface PointerDevice : DeviceType {};
+
+    /// <summary>
+    /// Mouse
+    /// </summary>
     public interface Mouse : PointerDevice {};
 
+    /// <summary>
+    /// Joystick devices
+    /// </summary>
     public interface Joystick : DeviceType {};
+
+    /// <summary>
+    /// Gamepad.
+    /// </summary>
     public interface Gamepad : Joystick {};
   };
 }

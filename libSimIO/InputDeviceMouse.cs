@@ -38,6 +38,9 @@ using static th.simio.ElementIdentifier.ElementType;
 namespace th.simio {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// <summary>
+/// Element identifiers for mouses.
+/// </summary>
 public static class Mouse
 {
   public readonly static ElementIdentifier xPosition = new ElementIdentifier(typeof(AbsoluteAxis), "x position");

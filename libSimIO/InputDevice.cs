@@ -31,20 +31,59 @@
 namespace th.simio {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// <summary>
+/// Delegate type for device attachment / deteachment notifications. Fired when an input device attached to or detached from the system.
+/// </summary>
+/// <param name="device">The device</param>
 public delegate void InputDeviceAttachmentNotification(InputDevice device);
+/// <summary>
+/// Delegate type for input notifications.
+/// </summary>
+/// <param name="device">Input device</param>
+/// <param name="element">Input element</param>
 public delegate void InputNotification(InputDevice device, InputDevice.Element element);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// <summary>
+/// Input device interface
+/// </summary>
 public partial interface InputDevice
 {
   // -------------------------------------------------------------------------
+  /// <summary>
+  /// Unique identification string for device.
+  /// </summary>
+  /// <value></value>
   string deviceIdentifier {get;}
+
+  /// <summary>
+  /// Hardware type descriptor.
+  /// Must be derived from InputDevice.DeviceType
+  /// </summary>
   Type deviceType {get;}
+
+  /// <summary>
+  /// Indicates if the device is currently attached
+  /// </summary>
   bool isAttached {get;}
+
+  /// <summary>
+  /// Controlled by code. When set to false disables all input from device
+  /// </summary>
   bool isActive {get; set;}
+
+  /// <summary>
+  /// Input elements on the device
+  /// </summary>
   IEnumerable<Element> elements {get;}
 
+  /// <summary>
+  /// Fired when device attached or detached.
+  /// </summary>
   event InputDeviceAttachmentNotification attachmentNotification;
+  /// <summary>
+  /// Fired when an event is occured on any element of device
+  /// </summary>
   event InputNotification onInput;
 }
 

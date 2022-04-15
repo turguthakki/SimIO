@@ -31,6 +31,9 @@
 namespace th.simio {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// <summary>
+/// Kernel32.dll
+/// </summary>
 public static class Kernel32
 {
   // https://docs.microsoft.com/en-us/windows/win32/secauthz/access-mask-format

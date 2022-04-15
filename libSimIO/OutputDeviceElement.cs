@@ -34,19 +34,59 @@ namespace th.simio {
 public partial interface OutputDevice
 {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /// <summary>
+  /// Output element.
+  /// Interface for an emulated input element on the device such as mouse wheel, x or y axis or a button.
+  /// </summary>
   public interface Element
   {
+    /// <summary>
+    /// Output device
+    /// </summary>
     OutputDevice device {get;}
+
+    /// <summary>
+    /// Identifier.
+    /// Used to identify whan an element is used for such as Keyboard.enter
+    /// </summary>
     ElementIdentifier id {get;}
 
+    /// <summary>
+    /// Indicates if the element is cyclic. A cyclic input element reports an absolute value but can cycle.
+    /// </summary>
     bool isCyclic {get;}
+
+    /// <summary>
+    /// Indicates if element accepts relative values such as mouse axes.
+    /// </summary>
     bool isRelative {get;}
+
+    /// <summary>
+    /// Indicates if element accepts absolute values such as joystick axes or buttons or keyboard keys
+    /// </summary>
     bool isAbsolute {get;}
 
+    /// <summary>
+    /// Minimum value.
+    /// On relative elements, minimum and maximum values has no meaning and is usually zero.
+    /// </summary>
     float minimumValue {get;}
+
+    /// <summary>
+    /// Minimum value.
+    /// On relative elements, minimum and maximum values has no meaning and is usually zero.
+    /// </summary>
     float maximumValue {get;}
 
+    /// <summary>
+    /// Indicates if the values of value, position and motion variables have valid values.
+    /// As an example a pov hat should report invalid values when user is not interacting with it.
+    /// </summary>
     bool isValid => true;
+
+    /// <summary>
+    /// Used to send input to emulation. Depending on if the element is relative or absolute accepts relative or absolute value
+    /// </summary>
     float value {get; set;}
   }
 }

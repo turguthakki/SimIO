@@ -34,15 +34,41 @@ namespace th.simio {
 public delegate void OutputDeviceAttachmentNotification(OutputDevice device);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// <summary>
+/// Interface for emulated input device. (Eg: Output device)
+/// </summary>
 public partial interface OutputDevice
 {
   // -------------------------------------------------------------------------
+  /// <summary>
+  /// Unique device identifier string
+  /// </summary>
   string deviceIdentifier {get;}
+
+  /// <summary>
+  /// Hardware type descriptor.
+  /// Must be derived from InputDevice.DeviceType
+  /// </summary>
   Type deviceType {get;}
+
+  /// <summary>
+  /// Indicates if the device is attached
+  /// </summary>
   bool isAttached {get;}
+
+  /// <summary>
+  /// Controlled by code. When set to false disables all output to device
+  /// </summary>
   bool isActive {get; set;}
+
+  /// <summary>
+  /// Output elements on the device.
+  /// </summary>
   IEnumerable<Element> elements {get;}
 
+  /// <summary>
+  /// Fired when device attached or detached.
+  /// </summary>
   event OutputDeviceAttachmentNotification attachmentNotification;
 }
 

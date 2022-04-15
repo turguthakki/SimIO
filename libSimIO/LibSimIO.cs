@@ -41,20 +41,38 @@ global using static th.simio.SimIO;
 namespace th.simio {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// <summary>
+/// Main interface class
+/// </summary>
 public class SimIO
 {
   // -------------------------------------------------------------------------
+  /// <summary>
+  /// Fired when an input device attached to or detached from the system.
+  /// </summary>
   public static event InputDeviceAttachmentNotification inputDevicesChanged = delegate {};
+  /// <summary>
+  /// Fired when a input occured any attached devices to system
+  /// </summary>
   public static event InputNotification onInput = delegate {};
 
   // -------------------------------------------------------------------------
+  /// <summary>
+  /// Fired when an output device is attached or detached
+  /// </summary>
   public static event OutputDeviceAttachmentNotification outputDevicesChanged = delegate {};
 
   // -------------------------------------------------------------------------
+  /// <summary>
+  /// List of all known input devices
+  /// </summary>
   public static IEnumerable<InputDevice> inputDevices => _inputDevices;
   static List<InputDevice> _inputDevices = new List<InputDevice>();
 
   // -------------------------------------------------------------------------
+  /// <summary>
+  /// List of all known output devices
+  /// </summary>
   public static IEnumerable<OutputDevice> outputDevices => _outputDevices;
   static List<OutputDevice> _outputDevices = new List<OutputDevice>();
 

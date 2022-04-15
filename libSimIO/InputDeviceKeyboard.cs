@@ -38,6 +38,9 @@ using static th.simio.ElementIdentifier.ElementType;
 namespace th.simio {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// <summary>
+/// Element identifiers for keyboards.
+/// </summary>
 public static class Keyboard
 {
   public static readonly HidIdentifier a = new HidIdentifier(typeof(ElementIdentifier.ElementType.Key), HidUsage.UsagePage.Keyboard, HidUsage.Usage.KeyA, "a");
@@ -165,6 +168,9 @@ public static class Keyboard
   public static readonly HidIdentifier rightalt = new HidIdentifier(typeof(ElementIdentifier.ElementType.Key), HidUsage.UsagePage.Keyboard, HidUsage.Usage.KeyRightAlt, "rightalt");
   public static readonly HidIdentifier rightgui = new HidIdentifier(typeof(ElementIdentifier.ElementType.Key), HidUsage.UsagePage.Keyboard, HidUsage.Usage.KeyRightGui, "rightgui");
 
+  /// <summary>
+  /// Convenience variable for all keyboard identifiers
+  /// </summary>
   public static readonly HidIdentifier[] keys = new HidIdentifier[] {
     a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, digit1, digit2, digit3, digit4, digit5, digit6, digit7, digit8, digit9, digit0,
     enter, escape, backspace, tab, space, minus, equals, leftbracket, rightbracket, backslash, semicolon, quote, grave, comma, period, slash, capslock,

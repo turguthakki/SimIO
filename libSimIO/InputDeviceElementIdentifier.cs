@@ -35,23 +35,62 @@ using System.Linq;
 namespace th.simio {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// <summary>
+/// Base class for uniquely identifying an input element on input device such as Keyboard's enter key or Mouse's X axis or Joystick's throttle axis
+/// </summary>
 public class ElementIdentifier : IEquatable<ElementIdentifier>
 {
   // -------------------------------------------------------------------------
+  /// <summary>
+  /// Used to identify hardware type of the element.
+  /// </summary>
   public interface ElementType
   {
+    /// <summary>
+    /// Any kind of axis.
+    /// </summary>
     public interface Axis : ElementType {}
+    /// <summary>
+    /// Relative axis such as Mouse X' axis
+    /// </summary>
     public interface RelativeAxis : Axis {}
+    /// <summary>
+    /// Absolute axis such as Joystick's throttle axis
+    /// </summary>
     public interface AbsoluteAxis : Axis {}
+
+    /// <summary>
+    /// Point of view hat. (Or DPad on gamepads)
+    /// </summary>
     public interface POVHat : AbsoluteAxis {}
+
+    /// <summary>
+    /// A button
+    /// </summary>
     public interface Button : ElementType {}
+
+    /// <summary>
+    /// A keyboard key
+    /// </summary>
     public interface Key : Button {}
   };
 
+  /// <summary>
+  /// Identifying string for debugging purposes. It does not uniquely identifies an element
+  /// </summary>
   public string name {get; private set;}
+
+  /// <summary>
+  /// Element type. See: <seealso cref="ElementType">ElementType</see>
+  /// </summary>
   public Type type {get; private set;}
 
   // -------------------------------------------------------------------------
+  /// <summary>
+  /// Constructor
+  /// </summary>
+  /// <param name="type">Element type. Must be derived from ElementType</param>
+  /// <param name="name">Debug string</param>
   public ElementIdentifier(Type type, string name)
   {
     if (type is ElementType) {

@@ -57,7 +57,13 @@ public abstract partial class RawInputDevice : InputDevice
   }
 
   // -------------------------------------------------------------------------
+  /// <summary>
+  /// HID manufacturer string
+  /// </summary>
   public string manufacturerString {get; private set;}
+  /// <summary>
+  /// HID product string
+  /// </summary>
   public string productString {get; private set;}
 
   // -------------------------------------------------------------------------

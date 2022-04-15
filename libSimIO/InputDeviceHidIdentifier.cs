@@ -35,12 +35,30 @@ using System.Linq;
 namespace th.simio {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// <summary>
+/// Element identifier for HID compatible devices
+/// Please see <a href="https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf">USB HID Usage tables</a> for detailed documentation
+/// </summary>
 public class HidIdentifier : ElementIdentifier
 {
+  /// <summary>
+  /// Usage page of the element
+  /// </summary>
   public HidUsage.UsagePage usagePage {get ;private set;}
+  /// <summary>
+  /// Usage of the element
+  /// </summary>
   public HidUsage.Usage usage {get; private set;}
 
   // -----------------------------------------------------------------------
+  /// <summary>
+  /// Constructor
+  /// </summary>
+  /// <param name="type">Element type. Must be derived from ElementIdentifier.ElementType</param>
+  /// <param name="usagePage">HUD usage page</param>
+  /// <param name="usage">Hid usage</param>
+  /// <param name="name">Debug string</param>
+  /// <returns></returns>
   public HidIdentifier(Type type, HidUsage.UsagePage usagePage, HidUsage.Usage usage, string name) : base(type, name)
   {
     this.usagePage = usagePage;
