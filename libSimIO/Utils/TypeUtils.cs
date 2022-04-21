@@ -1,6 +1,6 @@
-﻿/* ----------------------------------------------------------------------- *
+/* ----------------------------------------------------------------------- *
 
-    * LibSimIO.cs
+    * TypeUtils.cs
 
     ----------------------------------------------------------------------
 
@@ -27,87 +27,81 @@
     Turgut Hakkı Özdemir <turgut.hakki@gmail.com>
 
 * ------------------------------------------------------------------------ */
-global using System;
-global using System.Collections;
-global using System.Collections.Generic;
-global using System.Linq;
-global using System.Runtime.InteropServices;
-
-global using static th.SimIO.User32DLL;
-global using static th.SimIO.Kernel32DLL;
-global using static th.SimIO.HidDLL;
-global using static th.SimIO.SimIO;
 
 namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/// <summary>
-/// Main interface class
-/// </summary>
-public class SimIO
+public static class TypeUtils
 {
   // -------------------------------------------------------------------------
   /// <summary>
-  /// Fired when an input device attached to or detached from the system.
+  /// Returns if o is derived from or implements t
   /// </summary>
-  public static event InputDeviceAttachmentNotification inputDevicesChanged = delegate {};
-  /// <summary>
-  /// Fired when a input occured any attached devices to system
-  /// </summary>
-  public static event InputNotification onInput = delegate {};
+  public static bool isKindOf(this Type o, Type t) => t.IsAssignableFrom(o);
 
   // -------------------------------------------------------------------------
   /// <summary>
-  /// Fired when an output device is attached or detached
+  /// Returns if o is derived from or implements t
   /// </summary>
-  public static event OutputDeviceAttachmentNotification outputDevicesChanged = delegate {};
+  public static bool isKindOf<T>(this Type o) => o.isKindOf(typeof(T));
 
   // -------------------------------------------------------------------------
   /// <summary>
-  /// List of all known input devices
+  /// Reutrns if o is derived from or implements t
   /// </summary>
-  public static IEnumerable<InputDevice> inputDevices => _inputDevices;
-  static List<InputDevice> _inputDevices = new List<InputDevice>();
+  public static bool isKindOf(this object o, Type t) => o.GetType().isKindOf(t);
 
   // -------------------------------------------------------------------------
   /// <summary>
-  /// List of all known output devices
+  /// Returns if o is derived from or implements T
   /// </summary>
-  public static IEnumerable<OutputDevice> outputDevices => _outputDevices;
-  static List<OutputDevice> _outputDevices = new List<OutputDevice>();
+  public static bool isKindOf<T>(this object o) => o.GetType().isKindOf<T>();
 
   // -------------------------------------------------------------------------
-  static SimIO()
+  /// <summary>
+  /// Returns if o is derived from or implements any of t
+  /// </summary>
+  public static bool isKindOf(this object o, params Type []t) => o.GetType().isKindOf(t);
+
+  // -------------------------------------------------------------------------
+  /// <summary>
+  /// Returns if o is derived from or implements any of t
+  /// </summary>
+  public static bool isKindOf(this Type o, params Type []t)
   {
-    RawInputDevice.init();
-    SendInput.init();
-    VJoy.init();
-    update();
+    for (int i = 0; i < t.Length; i++) {
+      if (o.isKindOf(t))
+        return true;
+    }
+    return false;
   }
 
   // -------------------------------------------------------------------------
-  internal static void registerInputDevice(InputDevice device)
+  /// <summary>
+  /// Returns if type is nullable
+  /// </summary>
+  public static bool isNullable(this Type type) => !type.IsValueType || Nullable.GetUnderlyingType(type) != null;
+
+  // -------------------------------------------------------------------------
+  /// <summary>
+  /// Returns classes derived from type
+  /// </summary>
+  public static IEnumerable<Type> subTypes(this Type type)
   {
-    _inputDevices.Add(device);
-    device.attachmentNotification += (d) => inputDevicesChanged(d);
-    device.onInput += (d, e) => onInput(d, e);
-    inputDevicesChanged(device);
+    return type.Assembly.GetTypes().Where(t => !t.IsAbstract && t != type && t.isKindOf(type));
   }
 
   // -------------------------------------------------------------------------
-  internal static void registerOutputDevice(OutputDevice device)
+  /// <summary>
+  /// Returns classes derived from type
+  /// </summary>
+  /// <param name="type"></param>
+  /// <param name="allowAbstractClasses">Includes abstract classes when set</param>
+  /// <param name="allowConcreteClasses">Includes concrete classes when set</param>
+  public static IEnumerable<Type> subTypes(this Type type, bool allowAbstractClasses, bool allowConcreteClasses)
   {
-    _outputDevices.Add(device);
-    device.attachmentNotification += (d) => outputDevicesChanged(d);
-    outputDevicesChanged(device);
-  }
-
-  // -------------------------------------------------------------------------
-  public static void update()
-  {
-    RawInputDevice.update();
+    return type.Assembly.GetTypes().Where(t => (t.IsAbstract ? allowAbstractClasses : allowConcreteClasses) && t != type && t.isKindOf(type));
   }
 }
-
 
 } // End of namespace th.simio

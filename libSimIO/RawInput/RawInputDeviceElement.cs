@@ -28,7 +28,7 @@
 
 * ------------------------------------------------------------------------ */
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 public partial class RawInputDevice
@@ -38,7 +38,7 @@ public partial class RawInputDevice
   {
     unsafe internal delegate void HIDValueHandler(RAWINPUT *input, RawInputDeviceElement element);
     public InputDevice device {get; private set;}
-    public ElementIdentifier id {get; private set;}
+    public ElementIdentifier identifier {get; private set;}
 
     public bool isCyclic {get; private set;}
     public bool isRelative {get; private set;}
@@ -47,25 +47,24 @@ public partial class RawInputDevice
     public float minimumValue {get; private set;}
     public float maximumValue {get; private set;}
 
-    public bool isValid {get; private set;}
+    public bool isValid {get; private set;} = true;
     public float value {get; private set;}
     public float position {get; private set;}
     public float motion {get; private set;}
 
     public event InputNotification onInput = delegate{};
 
-    internal HidIdentifier hidIdentifier => id as HidIdentifier;
+    internal HidIdentifier hidIdentifier => identifier as HidIdentifier;
     internal bool tmpValue;
-    internal float hidMinValue;
-    internal float hidMaxValue;
     internal HIDValueHandler valueHandler;
 
     // -------------------------------------------------------------------------
     internal RawInputDeviceElement(RawInputDevice device, ElementIdentifier id, bool isAbsolute = true, float minimumValue = 0.0f, float maximumValue = 1.0f, bool isCyclic = false)
     {
       this.device = device;
-      this.id = id;
+      this.identifier = id;
       this.isAbsolute = isAbsolute;
+      this.isRelative = !isAbsolute;
       this.minimumValue = minimumValue;
       this.maximumValue = maximumValue;
       this.isCyclic = isCyclic;
@@ -85,7 +84,7 @@ public partial class RawInputDevice
     // -----------------------------------------------------------------------
     internal void setRelativeData(float motion, bool isValid = true)
     {
-      if (motion != 0.0f || this.isValid != isValid) {
+      if (this.motion != motion || this.isValid != isValid) {
         this.isValid = isValid;
         this.value = this.motion = motion;
         this.position = 0;

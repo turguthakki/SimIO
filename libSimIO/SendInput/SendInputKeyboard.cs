@@ -28,7 +28,7 @@
 
 * ------------------------------------------------------------------------ */
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 public partial class SendInputKeyboard : OutputDevice

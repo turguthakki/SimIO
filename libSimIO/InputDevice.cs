@@ -28,7 +28,7 @@
 
 * ------------------------------------------------------------------------ */
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /// <summary>
@@ -85,6 +85,33 @@ public partial interface InputDevice
   /// Fired when an event is occured on any element of device
   /// </summary>
   event InputNotification onInput;
+
+  // -------------------------------------------------------------------------
+  /// <summary>
+  /// Returns first element matching the given identifier or null.
+  /// </summary>
+  Element this[ElementIdentifier i] => elements.FirstOrDefault(e => e.identifier == i);
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  public abstract class Wrapper : InputDevice
+  {
+    public InputDevice device {get; private set;}
+
+    public string deviceIdentifier => device.deviceIdentifier;
+    public Type deviceType => device.deviceType;
+    public bool isAttached => device.isAttached;
+    public bool isActive {get => device.isActive; set => device.isActive = value;}
+    public IEnumerable<Element> elements => device.elements;
+    public event InputDeviceAttachmentNotification attachmentNotification {add => device.attachmentNotification += value; remove => device.attachmentNotification -= value;}
+    public event InputNotification onInput {add => device.onInput += value; remove => device.onInput -= value;}
+    public Element this[ElementIdentifier i] => device[i];
+
+    // -----------------------------------------------------------------------
+    public Wrapper(InputDevice device)
+    {
+      this.device = device;
+    }
+  }
 }
 
 } // End of namespace th.simio

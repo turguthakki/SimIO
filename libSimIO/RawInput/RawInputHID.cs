@@ -35,7 +35,7 @@ using System.Runtime.InteropServices;
 
 using static System.Runtime.InteropServices.Marshal;
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 public class RawInputHID : RawInputDevice
@@ -78,7 +78,7 @@ public class RawInputHID : RawInputDevice
       HIDP_BUTTON_CAPS[] buttonCaps = new HIDP_BUTTON_CAPS[capabilities.NumberInputButtonCaps];
       UInt16 buttonCapsCount = capabilities.NumberInputButtonCaps;
       fixed (HIDP_BUTTON_CAPS *bCaps = buttonCaps) {
-        HidP_GetButtonCaps(Hid.HIDP_REPORT_TYPE.HidP_Input, bCaps, &buttonCapsCount, preparsedData);
+        HidP_GetButtonCaps(HidDLL.HIDP_REPORT_TYPE.HidP_Input, bCaps, &buttonCapsCount, preparsedData);
       }
 
       for (int i = 0; i < buttonCapsCount; i++) {
@@ -92,7 +92,7 @@ public class RawInputHID : RawInputDevice
           buttons.pages.Add(bcaps.UsagePage, page = new Page());
 
         Action<HidUsage.UsagePage, HidUsage.Usage> addButton = (HidUsage.UsagePage usagePage, HidUsage.Usage usage) => {
-          RawInputDeviceElement element = new RawInputDeviceElement(this, new HidIdentifier(typeof(ElementIdentifier.ElementType.Button), usagePage, usage, "button p" + usagePage.ToString("x") + "u" + usage.ToString("x")));
+          RawInputDeviceElement element = new RawInputDeviceElement(this, new HidIdentifier(typeof(ElementIdentifier.ElementType.Button), usagePage, usage, "button " + ((int) usage).ToString()));
           page.elementsByUsage[usage] = element;
           elements.Add(element);
         };
@@ -161,7 +161,7 @@ public class RawInputHID : RawInputDevice
 
           if (vcaps.LogicalMax < vcaps.LogicalMin) {
             if (vcaps.BitSize > 0) {
-              minValue = 0;
+              minValue = vcaps.LogicalMin;
               maxValue = (float) (1 << vcaps.BitSize);
             }
             else {
@@ -196,13 +196,11 @@ public class RawInputHID : RawInputDevice
           RawInputDeviceElement element = new RawInputDeviceElement(this,
             new HidIdentifier(elementType, usagePage, usage, "axis p" + usagePage.ToString("x") + "u" + usage.ToString("x")),
             isAbsolute,
-            minValue < 0 ? -1 : 0,
-            1,
+            minValue,
+            maxValue,
             isCyclic
           );
 
-          element.hidMinValue = minValue;
-          element.hidMaxValue = maxValue;
           element.valueHandler = handler;
 
           page.elementsByUsage[usage] = element;
@@ -236,19 +234,15 @@ public class RawInputHID : RawInputDevice
   }
 
   // -------------------------------------------------------------------------
-  static float InverseLerp(float a, float b, float v) => (v - a) / (b - a);
-
-  // -------------------------------------------------------------------------
   static unsafe void valueHandler(RAWINPUT *data, RawInputDeviceElement axis)
   {
     UInt32 value = 0;
     HidP_GetUsageValue(HIDP_REPORT_TYPE.HidP_Input, axis.hidIdentifier.usagePage, 0, axis.hidIdentifier.usage, &value, (axis.device as RawInputHID).preparsedData, data->hid.bRawData, data->hid.dwSizeHid);
 
-    float fValue = InverseLerp(axis.hidMinValue, axis.hidMaxValue, value);
     if (axis.isAbsolute)
-      axis.setAbsoluteData(fValue, value >= axis.hidMinValue && value <= axis.hidMaxValue);
+      axis.setAbsoluteData((float) value, value >= axis.minimumValue && value <= axis.maximumValue);
     else
-      axis.setRelativeData(fValue, value >= axis.hidMinValue && value <= axis.hidMaxValue);
+      axis.setRelativeData((float) value, value >= axis.minimumValue && value <= axis.maximumValue);
   }
 
   // -------------------------------------------------------------------------
@@ -257,11 +251,10 @@ public class RawInputHID : RawInputDevice
     Int32 value = 0;
     HidP_GetScaledUsageValue(HIDP_REPORT_TYPE.HidP_Input, axis.hidIdentifier.usagePage, 0, axis.hidIdentifier.usage, &value, (axis.device as RawInputHID).preparsedData, data->hid.bRawData, data->hid.dwSizeHid);
 
-    float fValue = InverseLerp(axis.hidMinValue, axis.hidMaxValue, value);
     if (axis.isAbsolute)
-      axis.setAbsoluteData(fValue, value >= axis.hidMinValue && value <= axis.hidMaxValue);
+      axis.setAbsoluteData((float) value, value >= axis.minimumValue && value <= axis.maximumValue);
     else
-      axis.setRelativeData(fValue, value >= axis.hidMinValue && value <= axis.hidMaxValue);
+      axis.setRelativeData((float) value, value >= axis.minimumValue && value <= axis.maximumValue);
   }
 
   // -------------------------------------------------------------------------

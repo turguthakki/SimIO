@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------- *
 
-    * InputDeviceKeyboard.cs
+    * Keyboard.cs
 
     ----------------------------------------------------------------------
 
@@ -32,10 +32,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-using static th.simio.ElementIdentifier;
-using static th.simio.ElementIdentifier.ElementType;
+using static th.SimIO.ElementIdentifier;
+using static th.SimIO.ElementIdentifier.ElementType;
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /// <summary>
@@ -178,6 +178,543 @@ public static class Keyboard
     kpnumlock, kpdivide, kpmultiply, kpsubtract, kpadd, kpenter, kp1, kp2, kp3, kp4, kp5, kp6, kp7, kp8, kp9, kp0, kppoint, nonusbackslash, kpequals, f13, f14, f15,
     f16, f17, f18, f19, f20, f21, f22, f23, f24, help, menu, mute, sysreq, @return, kpclear, kpdecimal, leftcontrol, leftshift, leftalt, leftgui, rightcontrol, rightshift, rightalt, rightgui
   };
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  public class InputDeviceWrapper : InputDevice.Wrapper
+  {
+    public InputDevice.Element a;
+    public InputDevice.Element b;
+    public InputDevice.Element c;
+    public InputDevice.Element d;
+    public InputDevice.Element e;
+    public InputDevice.Element f;
+    public InputDevice.Element g;
+    public InputDevice.Element h;
+    public InputDevice.Element i;
+    public InputDevice.Element j;
+    public InputDevice.Element k;
+    public InputDevice.Element l;
+    public InputDevice.Element m;
+    public InputDevice.Element n;
+    public InputDevice.Element o;
+    public InputDevice.Element p;
+    public InputDevice.Element q;
+    public InputDevice.Element r;
+    public InputDevice.Element s;
+    public InputDevice.Element t;
+    public InputDevice.Element u;
+    public InputDevice.Element v;
+    public InputDevice.Element w;
+    public InputDevice.Element x;
+    public InputDevice.Element y;
+    public InputDevice.Element z;
+    public InputDevice.Element digit1;
+    public InputDevice.Element digit2;
+    public InputDevice.Element digit3;
+    public InputDevice.Element digit4;
+    public InputDevice.Element digit5;
+    public InputDevice.Element digit6;
+    public InputDevice.Element digit7;
+    public InputDevice.Element digit8;
+    public InputDevice.Element digit9;
+    public InputDevice.Element digit0;
+    public InputDevice.Element enter;
+    public InputDevice.Element escape;
+    public InputDevice.Element backspace;
+    public InputDevice.Element tab;
+    public InputDevice.Element space;
+    public InputDevice.Element minus;
+    public InputDevice.Element equals;
+    public InputDevice.Element leftbracket;
+    public InputDevice.Element rightbracket;
+    public InputDevice.Element backslash;
+    public InputDevice.Element semicolon;
+    public InputDevice.Element quote;
+    public InputDevice.Element grave;
+    public InputDevice.Element comma;
+    public InputDevice.Element period;
+    public InputDevice.Element slash;
+    public InputDevice.Element capslock;
+    public InputDevice.Element f1;
+    public InputDevice.Element f2;
+    public InputDevice.Element f3;
+    public InputDevice.Element f4;
+    public InputDevice.Element f5;
+    public InputDevice.Element f6;
+    public InputDevice.Element f7;
+    public InputDevice.Element f8;
+    public InputDevice.Element f9;
+    public InputDevice.Element f10;
+    public InputDevice.Element f11;
+    public InputDevice.Element f12;
+    public InputDevice.Element printscreen;
+    public InputDevice.Element scrolllock;
+    public InputDevice.Element pause;
+    public InputDevice.Element insert;
+    public InputDevice.Element home;
+    public InputDevice.Element pageup;
+    public InputDevice.Element deleteforward;
+    public InputDevice.Element end;
+    public InputDevice.Element pagedown;
+    public InputDevice.Element right;
+    public InputDevice.Element left;
+    public InputDevice.Element down;
+    public InputDevice.Element up;
+    public InputDevice.Element kpnumlock;
+    public InputDevice.Element kpdivide;
+    public InputDevice.Element kpmultiply;
+    public InputDevice.Element kpsubtract;
+    public InputDevice.Element kpadd;
+    public InputDevice.Element kpenter;
+    public InputDevice.Element kp1;
+    public InputDevice.Element kp2;
+    public InputDevice.Element kp3;
+    public InputDevice.Element kp4;
+    public InputDevice.Element kp5;
+    public InputDevice.Element kp6;
+    public InputDevice.Element kp7;
+    public InputDevice.Element kp8;
+    public InputDevice.Element kp9;
+    public InputDevice.Element kp0;
+    public InputDevice.Element kppoint;
+    public InputDevice.Element nonusbackslash;
+    public InputDevice.Element kpequals;
+    public InputDevice.Element f13;
+    public InputDevice.Element f14;
+    public InputDevice.Element f15;
+    public InputDevice.Element f16;
+    public InputDevice.Element f17;
+    public InputDevice.Element f18;
+    public InputDevice.Element f19;
+    public InputDevice.Element f20;
+    public InputDevice.Element f21;
+    public InputDevice.Element f22;
+    public InputDevice.Element f23;
+    public InputDevice.Element f24;
+    public InputDevice.Element help;
+    public InputDevice.Element menu;
+    public InputDevice.Element mute;
+    public InputDevice.Element sysreq;
+    public InputDevice.Element @return;
+    public InputDevice.Element kpclear;
+    public InputDevice.Element kpdecimal;
+    public InputDevice.Element leftcontrol;
+    public InputDevice.Element leftshift;
+    public InputDevice.Element leftalt;
+    public InputDevice.Element leftgui;
+    public InputDevice.Element rightcontrol;
+    public InputDevice.Element rightshift;
+    public InputDevice.Element rightalt;
+    public InputDevice.Element rightgui;
+
+    // -----------------------------------------------------------------------
+    public InputDeviceWrapper() : this(SimIO.inputDevices.First(d => d.deviceType.isKindOf<InputDevice.DeviceType.Keyboard>()))
+    {
+    }
+
+    // -----------------------------------------------------------------------
+    public InputDeviceWrapper(Func<InputDevice, bool> predicate) : this(SimIO.inputDevices.First(d => d.deviceType.isKindOf<InputDevice.DeviceType.Keyboard>() && predicate(d)))
+    {
+    }
+
+    // -----------------------------------------------------------------------
+    public InputDeviceWrapper(InputDevice device) : base(device)
+    {
+      a = device[Keyboard.a];
+      b = device[Keyboard.b];
+      c = device[Keyboard.c];
+      d = device[Keyboard.d];
+      e = device[Keyboard.e];
+      f = device[Keyboard.f];
+      g = device[Keyboard.g];
+      h = device[Keyboard.h];
+      i = device[Keyboard.i];
+      j = device[Keyboard.j];
+      k = device[Keyboard.k];
+      l = device[Keyboard.l];
+      m = device[Keyboard.m];
+      n = device[Keyboard.n];
+      o = device[Keyboard.o];
+      p = device[Keyboard.p];
+      q = device[Keyboard.q];
+      r = device[Keyboard.r];
+      s = device[Keyboard.s];
+      t = device[Keyboard.t];
+      u = device[Keyboard.u];
+      v = device[Keyboard.v];
+      w = device[Keyboard.w];
+      x = device[Keyboard.x];
+      y = device[Keyboard.y];
+      z = device[Keyboard.z];
+      digit1 = device[Keyboard.digit1];
+      digit2 = device[Keyboard.digit2];
+      digit3 = device[Keyboard.digit3];
+      digit4 = device[Keyboard.digit4];
+      digit5 = device[Keyboard.digit5];
+      digit6 = device[Keyboard.digit6];
+      digit7 = device[Keyboard.digit7];
+      digit8 = device[Keyboard.digit8];
+      digit9 = device[Keyboard.digit9];
+      digit0 = device[Keyboard.digit0];
+      enter = device[Keyboard.enter];
+      escape = device[Keyboard.escape];
+      backspace = device[Keyboard.backspace];
+      tab = device[Keyboard.tab];
+      space = device[Keyboard.space];
+      minus = device[Keyboard.minus];
+      equals = device[Keyboard.equals];
+      leftbracket = device[Keyboard.leftbracket];
+      rightbracket = device[Keyboard.rightbracket];
+      backslash = device[Keyboard.backslash];
+      semicolon = device[Keyboard.semicolon];
+      quote = device[Keyboard.quote];
+      grave = device[Keyboard.grave];
+      comma = device[Keyboard.comma];
+      period = device[Keyboard.period];
+      slash = device[Keyboard.slash];
+      capslock = device[Keyboard.capslock];
+      f1 = device[Keyboard.f1];
+      f2 = device[Keyboard.f2];
+      f3 = device[Keyboard.f3];
+      f4 = device[Keyboard.f4];
+      f5 = device[Keyboard.f5];
+      f6 = device[Keyboard.f6];
+      f7 = device[Keyboard.f7];
+      f8 = device[Keyboard.f8];
+      f9 = device[Keyboard.f9];
+      f10 = device[Keyboard.f10];
+      f11 = device[Keyboard.f11];
+      f12 = device[Keyboard.f12];
+      printscreen = device[Keyboard.printscreen];
+      scrolllock = device[Keyboard.scrolllock];
+      pause = device[Keyboard.pause];
+      insert = device[Keyboard.insert];
+      home = device[Keyboard.home];
+      pageup = device[Keyboard.pageup];
+      deleteforward = device[Keyboard.deleteforward];
+      end = device[Keyboard.end];
+      pagedown = device[Keyboard.pagedown];
+      right = device[Keyboard.right];
+      left = device[Keyboard.left];
+      down = device[Keyboard.down];
+      up = device[Keyboard.up];
+      kpnumlock = device[Keyboard.kpnumlock];
+      kpdivide = device[Keyboard.kpdivide];
+      kpmultiply = device[Keyboard.kpmultiply];
+      kpsubtract = device[Keyboard.kpsubtract];
+      kpadd = device[Keyboard.kpadd];
+      kpenter = device[Keyboard.kpenter];
+      kp1 = device[Keyboard.kp1];
+      kp2 = device[Keyboard.kp2];
+      kp3 = device[Keyboard.kp3];
+      kp4 = device[Keyboard.kp4];
+      kp5 = device[Keyboard.kp5];
+      kp6 = device[Keyboard.kp6];
+      kp7 = device[Keyboard.kp7];
+      kp8 = device[Keyboard.kp8];
+      kp9 = device[Keyboard.kp9];
+      kp0 = device[Keyboard.kp0];
+      kppoint = device[Keyboard.kppoint];
+      nonusbackslash = device[Keyboard.nonusbackslash];
+      kpequals = device[Keyboard.kpequals];
+      f13 = device[Keyboard.f13];
+      f14 = device[Keyboard.f14];
+      f15 = device[Keyboard.f15];
+      f16 = device[Keyboard.f16];
+      f17 = device[Keyboard.f17];
+      f18 = device[Keyboard.f18];
+      f19 = device[Keyboard.f19];
+      f20 = device[Keyboard.f20];
+      f21 = device[Keyboard.f21];
+      f22 = device[Keyboard.f22];
+      f23 = device[Keyboard.f23];
+      f24 = device[Keyboard.f24];
+      help = device[Keyboard.help];
+      menu = device[Keyboard.menu];
+      mute = device[Keyboard.mute];
+      sysreq = device[Keyboard.sysreq];
+      @return = device[Keyboard.@return];
+      kpclear = device[Keyboard.kpclear];
+      kpdecimal = device[Keyboard.kpdecimal];
+      leftcontrol = device[Keyboard.leftcontrol];
+      leftshift = device[Keyboard.leftshift];
+      leftalt = device[Keyboard.leftalt];
+      leftgui = device[Keyboard.leftgui];
+      rightcontrol = device[Keyboard.rightcontrol];
+      rightshift = device[Keyboard.rightshift];
+      rightalt = device[Keyboard.rightalt];
+      rightgui = device[Keyboard.rightgui];
+    }
+  }
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  public class OutputDeviceWrapper : OutputDevice.Wrapper
+  {
+    public OutputDevice.Element a;
+    public OutputDevice.Element b;
+    public OutputDevice.Element c;
+    public OutputDevice.Element d;
+    public OutputDevice.Element e;
+    public OutputDevice.Element f;
+    public OutputDevice.Element g;
+    public OutputDevice.Element h;
+    public OutputDevice.Element i;
+    public OutputDevice.Element j;
+    public OutputDevice.Element k;
+    public OutputDevice.Element l;
+    public OutputDevice.Element m;
+    public OutputDevice.Element n;
+    public OutputDevice.Element o;
+    public OutputDevice.Element p;
+    public OutputDevice.Element q;
+    public OutputDevice.Element r;
+    public OutputDevice.Element s;
+    public OutputDevice.Element t;
+    public OutputDevice.Element u;
+    public OutputDevice.Element v;
+    public OutputDevice.Element w;
+    public OutputDevice.Element x;
+    public OutputDevice.Element y;
+    public OutputDevice.Element z;
+    public OutputDevice.Element digit1;
+    public OutputDevice.Element digit2;
+    public OutputDevice.Element digit3;
+    public OutputDevice.Element digit4;
+    public OutputDevice.Element digit5;
+    public OutputDevice.Element digit6;
+    public OutputDevice.Element digit7;
+    public OutputDevice.Element digit8;
+    public OutputDevice.Element digit9;
+    public OutputDevice.Element digit0;
+    public OutputDevice.Element enter;
+    public OutputDevice.Element escape;
+    public OutputDevice.Element backspace;
+    public OutputDevice.Element tab;
+    public OutputDevice.Element space;
+    public OutputDevice.Element minus;
+    public OutputDevice.Element equals;
+    public OutputDevice.Element leftbracket;
+    public OutputDevice.Element rightbracket;
+    public OutputDevice.Element backslash;
+    public OutputDevice.Element semicolon;
+    public OutputDevice.Element quote;
+    public OutputDevice.Element grave;
+    public OutputDevice.Element comma;
+    public OutputDevice.Element period;
+    public OutputDevice.Element slash;
+    public OutputDevice.Element capslock;
+    public OutputDevice.Element f1;
+    public OutputDevice.Element f2;
+    public OutputDevice.Element f3;
+    public OutputDevice.Element f4;
+    public OutputDevice.Element f5;
+    public OutputDevice.Element f6;
+    public OutputDevice.Element f7;
+    public OutputDevice.Element f8;
+    public OutputDevice.Element f9;
+    public OutputDevice.Element f10;
+    public OutputDevice.Element f11;
+    public OutputDevice.Element f12;
+    public OutputDevice.Element printscreen;
+    public OutputDevice.Element scrolllock;
+    public OutputDevice.Element pause;
+    public OutputDevice.Element insert;
+    public OutputDevice.Element home;
+    public OutputDevice.Element pageup;
+    public OutputDevice.Element deleteforward;
+    public OutputDevice.Element end;
+    public OutputDevice.Element pagedown;
+    public OutputDevice.Element right;
+    public OutputDevice.Element left;
+    public OutputDevice.Element down;
+    public OutputDevice.Element up;
+    public OutputDevice.Element kpnumlock;
+    public OutputDevice.Element kpdivide;
+    public OutputDevice.Element kpmultiply;
+    public OutputDevice.Element kpsubtract;
+    public OutputDevice.Element kpadd;
+    public OutputDevice.Element kpenter;
+    public OutputDevice.Element kp1;
+    public OutputDevice.Element kp2;
+    public OutputDevice.Element kp3;
+    public OutputDevice.Element kp4;
+    public OutputDevice.Element kp5;
+    public OutputDevice.Element kp6;
+    public OutputDevice.Element kp7;
+    public OutputDevice.Element kp8;
+    public OutputDevice.Element kp9;
+    public OutputDevice.Element kp0;
+    public OutputDevice.Element kppoint;
+    public OutputDevice.Element nonusbackslash;
+    public OutputDevice.Element kpequals;
+    public OutputDevice.Element f13;
+    public OutputDevice.Element f14;
+    public OutputDevice.Element f15;
+    public OutputDevice.Element f16;
+    public OutputDevice.Element f17;
+    public OutputDevice.Element f18;
+    public OutputDevice.Element f19;
+    public OutputDevice.Element f20;
+    public OutputDevice.Element f21;
+    public OutputDevice.Element f22;
+    public OutputDevice.Element f23;
+    public OutputDevice.Element f24;
+    public OutputDevice.Element help;
+    public OutputDevice.Element menu;
+    public OutputDevice.Element mute;
+    public OutputDevice.Element sysreq;
+    public OutputDevice.Element @return;
+    public OutputDevice.Element kpclear;
+    public OutputDevice.Element kpdecimal;
+    public OutputDevice.Element leftcontrol;
+    public OutputDevice.Element leftshift;
+    public OutputDevice.Element leftalt;
+    public OutputDevice.Element leftgui;
+    public OutputDevice.Element rightcontrol;
+    public OutputDevice.Element rightshift;
+    public OutputDevice.Element rightalt;
+    public OutputDevice.Element rightgui;
+
+    // -----------------------------------------------------------------------
+    public OutputDeviceWrapper() : this(SimIO.outputDevices.First(d => d.deviceType.isKindOf<InputDevice.DeviceType.Keyboard>()))
+    {
+    }
+
+    // -----------------------------------------------------------------------
+    public OutputDeviceWrapper(Func<OutputDevice, bool> predicate) : this(SimIO.outputDevices.First(d => d.deviceType.isKindOf<InputDevice.DeviceType.Keyboard>() && predicate(d)))
+    {
+    }
+
+    // -----------------------------------------------------------------------
+    public OutputDeviceWrapper(OutputDevice device) : base(device)
+    {
+      a = device[Keyboard.a];
+      b = device[Keyboard.b];
+      c = device[Keyboard.c];
+      d = device[Keyboard.d];
+      e = device[Keyboard.e];
+      f = device[Keyboard.f];
+      g = device[Keyboard.g];
+      h = device[Keyboard.h];
+      i = device[Keyboard.i];
+      j = device[Keyboard.j];
+      k = device[Keyboard.k];
+      l = device[Keyboard.l];
+      m = device[Keyboard.m];
+      n = device[Keyboard.n];
+      o = device[Keyboard.o];
+      p = device[Keyboard.p];
+      q = device[Keyboard.q];
+      r = device[Keyboard.r];
+      s = device[Keyboard.s];
+      t = device[Keyboard.t];
+      u = device[Keyboard.u];
+      v = device[Keyboard.v];
+      w = device[Keyboard.w];
+      x = device[Keyboard.x];
+      y = device[Keyboard.y];
+      z = device[Keyboard.z];
+      digit1 = device[Keyboard.digit1];
+      digit2 = device[Keyboard.digit2];
+      digit3 = device[Keyboard.digit3];
+      digit4 = device[Keyboard.digit4];
+      digit5 = device[Keyboard.digit5];
+      digit6 = device[Keyboard.digit6];
+      digit7 = device[Keyboard.digit7];
+      digit8 = device[Keyboard.digit8];
+      digit9 = device[Keyboard.digit9];
+      digit0 = device[Keyboard.digit0];
+      enter = device[Keyboard.enter];
+      escape = device[Keyboard.escape];
+      backspace = device[Keyboard.backspace];
+      tab = device[Keyboard.tab];
+      space = device[Keyboard.space];
+      minus = device[Keyboard.minus];
+      equals = device[Keyboard.equals];
+      leftbracket = device[Keyboard.leftbracket];
+      rightbracket = device[Keyboard.rightbracket];
+      backslash = device[Keyboard.backslash];
+      semicolon = device[Keyboard.semicolon];
+      quote = device[Keyboard.quote];
+      grave = device[Keyboard.grave];
+      comma = device[Keyboard.comma];
+      period = device[Keyboard.period];
+      slash = device[Keyboard.slash];
+      capslock = device[Keyboard.capslock];
+      f1 = device[Keyboard.f1];
+      f2 = device[Keyboard.f2];
+      f3 = device[Keyboard.f3];
+      f4 = device[Keyboard.f4];
+      f5 = device[Keyboard.f5];
+      f6 = device[Keyboard.f6];
+      f7 = device[Keyboard.f7];
+      f8 = device[Keyboard.f8];
+      f9 = device[Keyboard.f9];
+      f10 = device[Keyboard.f10];
+      f11 = device[Keyboard.f11];
+      f12 = device[Keyboard.f12];
+      printscreen = device[Keyboard.printscreen];
+      scrolllock = device[Keyboard.scrolllock];
+      pause = device[Keyboard.pause];
+      insert = device[Keyboard.insert];
+      home = device[Keyboard.home];
+      pageup = device[Keyboard.pageup];
+      deleteforward = device[Keyboard.deleteforward];
+      end = device[Keyboard.end];
+      pagedown = device[Keyboard.pagedown];
+      right = device[Keyboard.right];
+      left = device[Keyboard.left];
+      down = device[Keyboard.down];
+      up = device[Keyboard.up];
+      kpnumlock = device[Keyboard.kpnumlock];
+      kpdivide = device[Keyboard.kpdivide];
+      kpmultiply = device[Keyboard.kpmultiply];
+      kpsubtract = device[Keyboard.kpsubtract];
+      kpadd = device[Keyboard.kpadd];
+      kpenter = device[Keyboard.kpenter];
+      kp1 = device[Keyboard.kp1];
+      kp2 = device[Keyboard.kp2];
+      kp3 = device[Keyboard.kp3];
+      kp4 = device[Keyboard.kp4];
+      kp5 = device[Keyboard.kp5];
+      kp6 = device[Keyboard.kp6];
+      kp7 = device[Keyboard.kp7];
+      kp8 = device[Keyboard.kp8];
+      kp9 = device[Keyboard.kp9];
+      kp0 = device[Keyboard.kp0];
+      kppoint = device[Keyboard.kppoint];
+      nonusbackslash = device[Keyboard.nonusbackslash];
+      kpequals = device[Keyboard.kpequals];
+      f13 = device[Keyboard.f13];
+      f14 = device[Keyboard.f14];
+      f15 = device[Keyboard.f15];
+      f16 = device[Keyboard.f16];
+      f17 = device[Keyboard.f17];
+      f18 = device[Keyboard.f18];
+      f19 = device[Keyboard.f19];
+      f20 = device[Keyboard.f20];
+      f21 = device[Keyboard.f21];
+      f22 = device[Keyboard.f22];
+      f23 = device[Keyboard.f23];
+      f24 = device[Keyboard.f24];
+      help = device[Keyboard.help];
+      menu = device[Keyboard.menu];
+      mute = device[Keyboard.mute];
+      sysreq = device[Keyboard.sysreq];
+      @return = device[Keyboard.@return];
+      kpclear = device[Keyboard.kpclear];
+      kpdecimal = device[Keyboard.kpdecimal];
+      leftcontrol = device[Keyboard.leftcontrol];
+      leftshift = device[Keyboard.leftshift];
+      leftalt = device[Keyboard.leftalt];
+      leftgui = device[Keyboard.leftgui];
+      rightcontrol = device[Keyboard.rightcontrol];
+      rightshift = device[Keyboard.rightshift];
+      rightalt = device[Keyboard.rightalt];
+      rightgui = device[Keyboard.rightgui];
+    }
+  }
+
 }
 
 } // End of namespace th.simio

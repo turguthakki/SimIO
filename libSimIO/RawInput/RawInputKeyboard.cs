@@ -32,7 +32,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 public class RawInputKeyboard : RawInputDevice
@@ -191,7 +191,7 @@ public class RawInputKeyboard : RawInputDevice
     };
     foreach(var elem in elements) {
       elem.onInput += (d, e) => notifyInput(d, e);
-      elementMap.Add((int) ((HidIdentifier) elem.id).usage, elem);
+      elementMap.Add((int) ((HidIdentifier) elem.identifier).usage, elem);
     }
     _elements = elements.ToArray();
   }

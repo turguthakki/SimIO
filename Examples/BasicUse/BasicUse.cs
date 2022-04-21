@@ -1,6 +1,6 @@
 ﻿/* ----------------------------------------------------------------------- *
 
-    * OutputTest.cs
+    * BasicUse.cs
 
     ----------------------------------------------------------------------
 
@@ -27,47 +27,33 @@
     Turgut Hakkı Özdemir <turgut.hakki@gmail.com>
 
 * ------------------------------------------------------------------------ */
-global using System;
-global using System.Collections;
-global using System.Collections.Generic;
-global using System.Linq;
-global using System.Runtime.InteropServices;
-global using th.simio;
-global using static th.simio.User32;
-global using static th.simio.Kernel32;
+using th.SimIO;
+using th.SimIO.Helpers;
 
-namespace th {
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-public class OutputTest
+public class BasicUse
 {
-  // -------------------------------------------------------------------------
   static void Main()
   {
-    // InputDevice joystick = SimIO.inputDevices.First(d => d is RawInputHID && (d as RawInputHID).productString == "Saitek X52 Flight Control System");
-    InputDevice joystick = SimIO.inputDevices.First();
-    OutputDevice vJoy = SimIO.outputDevices.First(d => d is vJoyDevice);
+    var iJoystick = new Joystick.InputDeviceWrapper();
+    var oMouse = new Mouse.OutputDeviceWrapper();
+    var iKeyboard = new Keyboard.InputDeviceWrapper();
+    var oKeyboard = new Keyboard.OutputDeviceWrapper();
 
-    foreach(var i in joystick.elements) {
-      var id = i.id as HidIdentifier;
-      var outE = vJoy.elements.FirstOrDefault(e => (e.id as HidIdentifier).usagePage == id.usagePage && (e.id as HidIdentifier).usage == id.usage);
-
-      if (outE is not null) {
-        i.onInput += (d, e) => {
-          outE.value = i.value * outE.maximumValue;
-        };
-      }
-    }
-
-
-    bool running = true;
-    while(running) {
+    while(!iKeyboard.escape.isDown()) {
       SimIO.update();
+
+      oKeyboard.w.value = iJoystick.y.bidiNormalizedPosition() < -0.5f ? 1 : 0;
+      oKeyboard.s.value = iJoystick.y.bidiNormalizedPosition() > 0.5f ? 1 : 0;
+      oKeyboard.a.value = iJoystick.x.bidiNormalizedPosition() < -0.5f ? 1 : 0;
+      oKeyboard.d.value = iJoystick.x.bidiNormalizedPosition() > 0.5f ? 1 : 0;
+
+      oKeyboard.leftshift.value = iJoystick.z.value < 0.5f ? 1.0f : 0.0f;
+      oMouse.leftButton.value = iJoystick.button1.value;
+      oMouse.rightButton.value = iJoystick.button2.value;
+
       Thread.Sleep(16);
     }
 
     Console.WriteLine("Ok");
   }
 }
-
-} // End of namespace th

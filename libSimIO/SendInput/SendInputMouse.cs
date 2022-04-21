@@ -28,7 +28,7 @@
 
 * ------------------------------------------------------------------------ */
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 public class SendInputMouse : OutputDevice
@@ -60,8 +60,10 @@ public class SendInputMouse : OutputDevice
     {
       get => getValue();
       set {
-        data[0].mi = setValue(value);
-        SendInput(1, data, Marshal.SizeOf<INPUT>());
+        if (value != getValue()) {
+          data[0].mi = setValue(value);
+          SendInput(1, data, Marshal.SizeOf<INPUT>());
+        }
       }
     }
 

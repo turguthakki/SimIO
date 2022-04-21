@@ -29,7 +29,7 @@
 * ------------------------------------------------------------------------ */
 using static System.Runtime.InteropServices.Marshal;
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 public abstract partial class RawInputDevice : InputDevice
@@ -111,6 +111,14 @@ public abstract partial class RawInputDevice : InputDevice
 
   // -------------------------------------------------------------------------
   internal unsafe abstract void update(RAWINPUT *data);
+
+  // -------------------------------------------------------------------------
+  internal virtual void updateWithNoData()
+  {
+    foreach(var e in elements.Where(e => e.isRelative).Select(e => e as RawInputDeviceElement)) {
+      e.setRelativeData(0, e.isValid);
+    }
+  }
 }
 
 } // End of namespace th.simio

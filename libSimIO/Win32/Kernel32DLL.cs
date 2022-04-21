@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------- *
 
-    * Kernel32.cs
+    * Kernel32DLL.cs
 
     ----------------------------------------------------------------------
 
@@ -28,13 +28,13 @@
 
 * ------------------------------------------------------------------------ */
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /// <summary>
 /// Kernel32.dll
 /// </summary>
-public static class Kernel32
+public static class Kernel32DLL
 {
   // https://docs.microsoft.com/en-us/windows/win32/secauthz/access-mask-format
   public const UInt32 GENERIC_READ = 0x80000000;

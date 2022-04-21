@@ -29,17 +29,50 @@
 * ------------------------------------------------------------------------ */
 using static System.Runtime.InteropServices.Marshal;
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 public partial class RawInputDevice
 {
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  public unsafe class DataRelay
+  {
+    RawInputDevice device;
+    RAWINPUT *data;
+
+    // -----------------------------------------------------------------------
+    public DataRelay(RawInputDevice device)
+    {
+      this.device = device;
+    }
+
+    // -----------------------------------------------------------------------
+    public void setData(RAWINPUT *data)
+    {
+      this.data = data;
+    }
+
+    // -----------------------------------------------------------------------
+    public void update()
+    {
+      if (data != null) {
+        device.update(data);
+        FreeHGlobal((IntPtr) data);
+        data = null;
+      }
+      else {
+        device.updateWithNoData();
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------
   static IntPtr hInstance = GetModuleHandle(null);
   static WNDCLASSEX wind_class = new WNDCLASSEX();
   static IntPtr hWnd = IntPtr.Zero;
   static MSG msg = new MSG();
   static List<RawInputDevice> rawInputDevices = new List<RawInputDevice>();
-  static Dictionary<IntPtr, RawInputDevice> deviceMap = new Dictionary<IntPtr, RawInputDevice>();
+  static Dictionary<IntPtr, DataRelay> updateMap = new Dictionary<IntPtr, DataRelay>();
   static unsafe Queue<IntPtr> dataQueue = new Queue<IntPtr>();
   static WNDPROC wndProcDelegate;
   static IntPtr wndProcDelegatePtr;
@@ -195,7 +228,7 @@ public partial class RawInputDevice
 
         lock(rawInputDevices) {
           rawInputDevices.Add(newRawInputDevice);
-          deviceMap.Add(newRawInputDevice.deviceHandle, newRawInputDevice);
+          updateMap.Add(newRawInputDevice.deviceHandle, new DataRelay(newRawInputDevice));
           registerInputDevice(newRawInputDevice);
         }
       }
@@ -238,12 +271,15 @@ public partial class RawInputDevice
         }
         else
           break;
-        RawInputDevice device;
-        if (deviceMap.TryGetValue(data->header.hDevice, out device)) {
-          device.update(data);
+        DataRelay relay;
+        if (updateMap.TryGetValue(data->header.hDevice, out relay)) {
+          relay.setData(data);
         }
-        FreeHGlobal((IntPtr) data);
       }
+    }
+
+    foreach(var r in updateMap.Values) {
+      r.update();
     }
   }
 }

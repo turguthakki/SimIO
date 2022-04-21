@@ -32,11 +32,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 public class RawInputMouse : RawInputDevice
 {
+  RawInputDeviceElement xPosition;
+  RawInputDeviceElement yPosition;
+
   RawInputDeviceElement xAxis;
   RawInputDeviceElement yAxis;
   RawInputDeviceElement wheelX;
@@ -52,6 +55,8 @@ public class RawInputMouse : RawInputDevice
   {
     deviceType = typeof(InputDevice.DeviceType.Mouse);
     List<RawInputDeviceElement> elements = new List<RawInputDeviceElement>() {
+      (xPosition = new RawInputDeviceElement(this, Mouse.xPosition, true, 0, 0)),
+      (yPosition = new RawInputDeviceElement(this, Mouse.yPosition, true, 0, 0)),
       (xAxis = new RawInputDeviceElement(this, Mouse.xAxis, false, 0, 0)),
       (yAxis = new RawInputDeviceElement(this, Mouse.yAxis, false, 0, 0)),
       (wheelX = new RawInputDeviceElement(this, Mouse.wheelX, false, 0, 0)),
@@ -73,13 +78,7 @@ public class RawInputMouse : RawInputDevice
   {
     RAWMOUSE m = data->mouse;
 
-    if ((m.usFlags & MOUSE_MOVE_ABSOLUTE) == MOUSE_MOVE_ABSOLUTE) {
-      // https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-rawmouse
-      bool isVirtualDesktop = (m.usFlags & MOUSE_VIRTUAL_DESKTOP) == MOUSE_VIRTUAL_DESKTOP;
-      xAxis.setAbsoluteData((m.lLastX / 65535.0f) * GetSystemMetrics(isVirtualDesktop ? SM_CXVIRTUALSCREEN : SM_CXSCREEN));
-      yAxis.setAbsoluteData((m.lLastY / 65535.0f) * GetSystemMetrics(isVirtualDesktop ? SM_CYVIRTUALSCREEN : SM_CYSCREEN));
-    }
-    else {
+    if ((m.usFlags & MOUSE_MOVE_RELATIVE) == MOUSE_MOVE_RELATIVE) {
       // https://stackoverflow.com/questions/36862013/raw-input-and-cursor-acceleration
       float x = m.lLastX;
       float y = m.lLastY;

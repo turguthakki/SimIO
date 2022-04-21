@@ -28,7 +28,7 @@
 
 * ------------------------------------------------------------------------ */
 
-namespace th.simio {
+namespace th.SimIO {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 public partial interface InputDevice
@@ -49,7 +49,7 @@ public partial interface InputDevice
     /// Identifier.
     /// Used to identify whan an element is used for such as Keyboard.enter
     /// </summary>
-    ElementIdentifier id {get;}
+    ElementIdentifier identifier {get;}
 
     /// <summary>
     /// Indicates if the element is cyclic. A cyclic input element reports an absolute value but can cycle like a mouse wheel.
@@ -66,6 +66,11 @@ public partial interface InputDevice
     /// Indicates if element reports absolute values such as joystick axes or buttons or keyboard keys
     /// </summary>
     bool isAbsolute {get;}
+
+    /// <summary>
+    /// Returns if
+    /// </summary>
+    bool isBidirectional => isAbsolute && minimumValue < 0 && -minimumValue == maximumValue;
 
     /// <summary>
     /// Minimum value.
