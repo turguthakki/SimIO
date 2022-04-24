@@ -1,25 +1,63 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows7.0</TargetFramework>
+    <Platforms>x64</Platforms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <Platforms>x64</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
     <BuildDependsOn>
       AfterBuild
     </BuildDependsOn>
+
     <OutputPath>$(SolutionDir)/bin</OutputPath>
+
+    <NoWarn>$(NoWarn);CS1591;</NoWarn>
+
+    <PackageId>SimIO</PackageId>
+    <Version>0.7.0</Version>
+    <Authors>Turgut Hakkı Özdemir turgut.hakki@gmail.com</Authors>
+    <PackageTags>Simulation, Joystick, RawInput, Raw Input, HID, Human Interface Device, FreePIE, GlovePIE</PackageTags>
+    <Description>Programmable Input Emulator for C#. It's a simulation enthusiast's utility similar to FreePIE and GlovePIE but for C#.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Product>SimIO</Product>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/turguthakki/SimIO</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\License.txt" Pack="true" PackagePath=""/>
+    <Content Include="vJoy\vJoyInterface.dll">
+      <Pack>true</Pack>
+      <PackagePath>runtimes\win-x64\native</PackagePath>
+      <Link>vJoyInterface.dll</Link>
+      <Visible>false</Visible>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <NuGetPackageId>SimIO</NuGetPackageId>
+    </Content>
+    <Content Include="vJoy\vJoyInterfaceWrap.dll">
+      <Pack>true</Pack>
+      <PackagePath>lib\$(TargetFramework)</PackagePath>
+      <Link>vJoyInterface.dll</Link>
+      <Visible>false</Visible>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <NativeLibs Include="vJoy\vJoyInterface.dll" />
     <Reference Include="vJoyInterfaceWrap">
       <HintPath>vJoy/vJoyInterfaceWrap.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-  <Target Name="CopyDLL" AfterTargets="Build">
-    <Copy SourceFiles="$(ProjectDir)\vJoy\vJoyInterface.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
-  </Target>
 
 </Project>

@@ -34,13 +34,8 @@ public class InputModifiers
 {
   static void Main()
   {
-    foreach(var d in SimIO.inputDevices.Where(d => d.isKindOf<RawInputHID>()).Select(d => d as RawInputHID)) {
-      Console.WriteLine(d.productString);
-    }
-
     var iKeyboard = new Keyboard.InputDeviceWrapper();
-    var iJoystick = new Joystick.InputDeviceWrapper(d => (d as RawInputHID).productString == "Saitek X52 Flight Control System");
-    // var iJoystick = new Joystick.InputDeviceWrapper();
+    var iJoystick = new Joystick.InputDeviceWrapper();
     var iMouse = new Mouse.InputDeviceWrapper();
 
     // Axis value is normalized between 0 and 1
@@ -66,7 +61,7 @@ public class InputModifiers
     var custom = iJoystick.x.functionalModifier(p => p.value * 2, minimumValue : -2, maximumValue : 2);
 
     // Makes a button modifier. The "button" will be considered down between given values
-    var button = iJoystick.x.normalized().button(0.5f, 1.0f);
+    var button = iJoystick.x.normalized().button(0.75f, 1.0f);
 
     if (button.isDown) {
       // ... do something
@@ -89,7 +84,16 @@ public class InputModifiers
     while(!escapeKey.isDown) {
       SimIO.update();
 
-      Console.WriteLine(splitOne.value + " " + splitTwo.value);
+      Console.WriteLine();
+      Console.WriteLine("Normalized : " + normalized.value.ToString("0.00"));
+      Console.WriteLine("Bidi : " + bidi.value.ToString("0.00"));
+      Console.WriteLine("BidiNormalized : " + bidiNormalized.value.ToString("0.00"));
+      Console.WriteLine("DeadzoneAtStart : " + deadzoneAtStart.value.ToString("0.00"));
+      Console.WriteLine("DeadzoneAtEnd : " + deadzoneAtEnd.value.ToString("0.00"));
+      Console.WriteLine("Deadzone : " + deadzone.value.ToString("0.00"));
+      Console.WriteLine("Custom : " + custom.value.ToString("0.00"));
+      Console.WriteLine("Button : " + button.value.ToString("0.00"));
+      Console.WriteLine("Splits : " + splitOne.value.ToString("0.00") + splitTwo.value.ToString("0.00"));
 
       Thread.Sleep(250);
     }

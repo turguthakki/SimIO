@@ -81,7 +81,7 @@ public class ElementIdentifier : IEquatable<ElementIdentifier>
   public string name {get; private set;}
 
   /// <summary>
-  /// Element type. See: <seealso cref="ElementType">ElementType</see>
+  /// Element type.
   /// </summary>
   public Type type {get; private set;}
 
