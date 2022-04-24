@@ -34,6 +34,9 @@ using AbsoluteAxis = ElementIdentifier.ElementType.AbsoluteAxis;
 using Button = ElementIdentifier.ElementType.Button;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// <summary>
+/// Element identifiers for joysticks
+/// </summary>
 public static class Joystick
 {
   public readonly static ElementIdentifier x = new HidIdentifier(typeof(AbsoluteAxis), HidUsage.UsagePage.GenericDesktop, HidUsage.Usage.X, "x axis");

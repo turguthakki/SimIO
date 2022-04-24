@@ -55,6 +55,9 @@ public partial class RawInputDevice
     // -----------------------------------------------------------------------
     public void update()
     {
+      foreach(var e in device.elements.Where(e => e.isAbsolute).Select(e => e as RawInputDeviceElement)) {
+        e.clearMotion();
+      }
       if (data != null) {
         device.update(data);
         FreeHGlobal((IntPtr) data);

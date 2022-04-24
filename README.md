@@ -15,7 +15,7 @@ Code Example
 
 ``` csharp
 using th.SimIO;
-using th.SimIO.Helpers;
+using th.SimIO.Selectors;
 
 public class BasicUse
 {
@@ -26,13 +26,17 @@ public class BasicUse
     var iKeyboard = new Keyboard.InputDeviceWrapper();
     var oKeyboard = new Keyboard.OutputDeviceWrapper();
 
-    while(!iKeyboard.escape.isDown()) {
+    var xAxis = iJoystick.x.normalizedBidirectional();
+    var yAxis = iJoystick.y.normalizedBidirectional();
+    var escapeKey = iKeyboard.escape.button();
+
+    while(!escapeKey.isDown) {
       SimIO.update();
 
-      oKeyboard.w.value = iJoystick.y.bidiNormalizedPosition() < -0.5f ? 1 : 0;
-      oKeyboard.s.value = iJoystick.y.bidiNormalizedPosition() > 0.5f ? 1 : 0;
-      oKeyboard.a.value = iJoystick.x.bidiNormalizedPosition() < -0.5f ? 1 : 0;
-      oKeyboard.d.value = iJoystick.x.bidiNormalizedPosition() > 0.5f ? 1 : 0;
+      oKeyboard.w.value = yAxis.value < -0.5f ? 1 : 0;
+      oKeyboard.s.value = yAxis.value > 0.5f ? 1 : 0;
+      oKeyboard.a.value = xAxis.value < -0.5f ? 1 : 0;
+      oKeyboard.d.value = xAxis.value > 0.5f ? 1 : 0;
 
       oKeyboard.leftshift.value = iJoystick.z.value < 0.5f ? 1.0f : 0.0f;
       oMouse.leftButton.value = iJoystick.button1.value;

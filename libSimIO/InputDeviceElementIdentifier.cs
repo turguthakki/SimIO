@@ -113,14 +113,9 @@ public class ElementIdentifier : IEquatable<ElementIdentifier>
   }
 
   // -------------------------------------------------------------------------
-  public virtual bool Equals(ElementIdentifier rh)
-  {
-    return (this is null == rh is null) && (this is not null && rh is not null ? GetType() == rh.GetType() && type == rh.type && System.Object.ReferenceEquals(this, rh) : false);
-  }
-
-  public static bool operator == (ElementIdentifier a, ElementIdentifier b) => a.Equals(b);
-  public static bool operator != (ElementIdentifier a, ElementIdentifier b) => !a.Equals(b);
-
+  public virtual bool Equals(ElementIdentifier rh) => ReferenceEquals(this, rh) || (GetType() == rh.GetType() && type == rh.type);
+  public static bool operator == (ElementIdentifier a, ElementIdentifier b) => ReferenceEquals(a, b) || a.Equals(b);
+  public static bool operator != (ElementIdentifier a, ElementIdentifier b) => !(a == b);
 }
 
 } // End of namespace th.simio

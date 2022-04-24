@@ -9,6 +9,7 @@
     <BuildDependsOn>
       AfterBuild
     </BuildDependsOn>
+    <OutputPath>$(SolutionDir)/bin</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +19,7 @@
   </ItemGroup>
 
   <Target Name="CopyDLL" AfterTargets="Build">
-    <Copy SourceFiles="$(ProjectDir)\vJoy\vJoyInterface.dll" DestinationFolder="$(ProjectDir)$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(ProjectDir)\vJoy\vJoyInterface.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
   </Target>
 
 </Project>

@@ -46,6 +46,8 @@ namespace th.SimIO {
 /// </summary>
 public class SimIO
 {
+  public delegate void UpdateNotification();
+
   // -------------------------------------------------------------------------
   /// <summary>
   /// Fired when an input device attached to or detached from the system.
@@ -61,6 +63,18 @@ public class SimIO
   /// Fired when an output device is attached or detached
   /// </summary>
   public static event OutputDeviceAttachmentNotification outputDevicesChanged = delegate {};
+
+  // -------------------------------------------------------------------------
+  /// <summary>
+  /// Fired before update starts
+  /// </summary>
+  public static event UpdateNotification onBeforeUpdate = delegate {};
+
+  // -------------------------------------------------------------------------
+  /// <summary>
+  /// Fired after update ends
+  /// </summary>
+  public static event UpdateNotification onAfterUpdate = delegate {};
 
   // -------------------------------------------------------------------------
   /// <summary>
@@ -105,7 +119,9 @@ public class SimIO
   // -------------------------------------------------------------------------
   public static void update()
   {
+    onBeforeUpdate();
     RawInputDevice.update();
+    onAfterUpdate();
   }
 }
 

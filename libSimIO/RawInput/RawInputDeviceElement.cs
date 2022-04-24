@@ -71,6 +71,9 @@ public partial class RawInputDevice
     }
 
     // -----------------------------------------------------------------------
+    internal void clearMotion() => motion = 0;
+
+    // -----------------------------------------------------------------------
     internal void setAbsoluteData(float position, bool isValid = true)
     {
       if (position != this.position || this.isValid != isValid) {

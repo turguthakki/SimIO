@@ -90,18 +90,18 @@ public class RawInputMouse : RawInputDevice
         SystemParametersInfo(SPI_GETMOUSE, 0, (IntPtr) pAcceleration, 0);
       }
 
-      if (acceleration[2] > 0 && acceleration[0] < Math.Abs(m.lLastX))
+      if (acceleration[2] > 0 && acceleration[0] < mathf.abs(m.lLastX))
           x *= 2;
-      else if (acceleration[2] > 1 && acceleration[1] < Math.Abs(m.lLastX))
+      else if (acceleration[2] > 1 && acceleration[1] < mathf.abs(m.lLastX))
           x *= 2;
 
-      if (acceleration[2] > 0 && acceleration[0] < Math.Abs(m.lLastX))
+      if (acceleration[2] > 0 && acceleration[0] < mathf.abs(m.lLastX))
           y *= 2;
-      else if (acceleration[2] > 1 && acceleration[1] < Math.Abs(m.lLastX))
+      else if (acceleration[2] > 1 && acceleration[1] < mathf.abs(m.lLastX))
           y *= 2;
 
-      x *= (float) Math.Round(speed / 10.0f);
-      y *= (float) Math.Round(speed / 10.0f);
+      x *= (float) mathf.round(speed / 10.0f);
+      y *= (float) mathf.round(speed / 10.0f);
 
       xAxis.setRelativeData(x);
       yAxis.setRelativeData(y);

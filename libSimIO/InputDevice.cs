@@ -93,8 +93,14 @@ public partial interface InputDevice
   Element this[ElementIdentifier i] => elements.FirstOrDefault(e => e.identifier == i);
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /// <summary>
+  /// Abstract base class for simplified input device interfaces
+  /// </summary>
   public abstract class Wrapper : InputDevice
   {
+    /// <summary>
+    /// Returns actual input device
+    /// </summary>
     public InputDevice device {get; private set;}
 
     public string deviceIdentifier => device.deviceIdentifier;
@@ -107,6 +113,9 @@ public partial interface InputDevice
     public Element this[ElementIdentifier i] => device[i];
 
     // -----------------------------------------------------------------------
+    /// <summary>
+    /// Constructor
+    /// </summary>
     public Wrapper(InputDevice device)
     {
       this.device = device;

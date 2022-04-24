@@ -61,6 +61,11 @@ public static class User32DLL
     [MarshalAs(UnmanagedType.LPWStr)]
     public string lpszClassName = null;
     public IntPtr hIconSm = IntPtr.Zero;
+
+    // -----------------------------------------------------------------------
+    public WNDCLASSEX()
+    {
+    }
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -215,6 +220,11 @@ public static class User32DLL
     public UInt32 dwFlags = 0;
     public UInt32 time = 0;
     public IntPtr dwExtraInfo = IntPtr.Zero;
+
+    // -----------------------------------------------------------------------
+    public KEYBDINPUT()
+    {
+    }
   };
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -228,6 +238,11 @@ public static class User32DLL
     public UInt32 dwFlags = 0;
     public UInt32 time = 0;
     public IntPtr dwExtraInfo = IntPtr.Zero;
+
+    // -----------------------------------------------------------------------
+    public MOUSEINPUT()
+    {
+    }
   };
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
