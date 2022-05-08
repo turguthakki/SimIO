@@ -12,6 +12,7 @@
     <NoWarn>$(NoWarn);CS1591;</NoWarn>
 
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
 
   <ItemGroup>

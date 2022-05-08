@@ -193,8 +193,17 @@ public class RawInputHID : RawInputDevice
           else
             elementType = typeof(ElementIdentifier.ElementType.RelativeAxis);
 
+          Func<HidIdentifier> getIdentifier = () => {
+            HidIdentifier rv = typeof(Joystick)
+              .GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
+              .Where(fi => fi.FieldType.isKindOf<ElementIdentifier>())
+              .Select(fi => fi.GetValue(null) as HidIdentifier)
+              .FirstOrDefault(i => i.type == elementType && i.usage == usage && i.usagePage == usagePage);
+            return rv == null ? new HidIdentifier(elementType, usagePage, usage, "axis p" + usagePage.ToString("x") + "u" + usage.ToString("x")) : rv;
+          };
+
           RawInputDeviceElement element = new RawInputDeviceElement(this,
-            new HidIdentifier(elementType, usagePage, usage, "axis p" + usagePage.ToString("x") + "u" + usage.ToString("x")),
+            getIdentifier(),
             isAbsolute,
             minValue,
             maxValue,
