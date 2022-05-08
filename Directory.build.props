@@ -1,0 +1,11 @@
+<Project>
+  <Import Project="User.props" Condition="Exists('User.props')"/>
+  <Import Project="Config.props"/>
+  <PropertyGroup>
+    <BuildDir Condition="'$(BuildDir)'==''">$(SolutionDir)/build</BuildDir>
+    <OutputPath>$(BuildDir)/bin</OutputPath>
+    <BaseIntermediateOutputPath>$(BuildDir)/obj/$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BuildDir)/obj/$(MSBuildProjectName)</IntermediateOutputPath>
+    <MSBUildProjectExtensionsPath>$(BuildDir)/obj/$(MSBuildProjectName)</MSBUildProjectExtensionsPath>
+  </PropertyGroup>
+</Project>

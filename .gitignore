@@ -2,6 +2,9 @@
 .vs/*
 .vscode/
 .vscode/*
+build/
+build/*
+user.props
 bin/
 bin/*
 obj/

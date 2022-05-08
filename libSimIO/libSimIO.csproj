@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="Transform.props"/>
+
   <PropertyGroup>
     <TargetFramework>net6.0-windows7.0</TargetFramework>
     <Platforms>x64</Platforms>
@@ -7,16 +9,10 @@
     <Nullable>disable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
-    <BuildDependsOn>
-      AfterBuild
-    </BuildDependsOn>
-
-    <OutputPath>$(SolutionDir)/bin</OutputPath>
-
     <NoWarn>$(NoWarn);CS1591;</NoWarn>
 
     <PackageId>SimIO</PackageId>
-    <Version>0.7.0</Version>
+    <Version>$(Version)</Version>
     <Authors>Turgut Hakkı Özdemir turgut.hakki@gmail.com</Authors>
     <PackageTags>Simulation, Joystick, RawInput, Raw Input, HID, Human Interface Device, FreePIE, GlovePIE</PackageTags>
     <Description>Programmable Input Emulator for C#. It's a simulation enthusiast's utility similar to FreePIE and GlovePIE but for C#.</Description>
@@ -26,9 +22,14 @@
     <RepositoryUrl>https://github.com/turguthakki/SimIO</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseExpression>Zlib</PackageLicenseExpression>
 
   </PropertyGroup>
+
+  <Target Name="Config" BeforeTargets="Build">
+    <Transform In="$(ProjectDir)/Templates/console/.template.config/template.json" Out="$(IntermediateOutputPath)/console/.template.config/template.json" From="__VERSION__" To="$(Version)" />
+    <Transform In="$(ProjectDir)/Templates/blazor/.template.config/template.json" Out="$(IntermediateOutputPath)/blazor/.template.config/template.json" From="__VERSION__" To="$(Version)" />
+  </Target>
 
   <ItemGroup>
     <None Include="..\README.md">
@@ -51,6 +52,14 @@
       <Visible>false</Visible>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\*\**\*" Exclude="Templates\*\**\.template.config\template.json"/>
+    <Content Include="$(IntermediateOutputPath)/console/.template.config/template.json">
+      <PackagePath>content/Templates/console/.template.config</PackagePath>
+    </Content>
+    <Content Include="$(IntermediateOutputPath)/blazor/.template.config/template.json">
+      <PackagePath>content/Templates/blazor/.template.config</PackagePath>
+    </Content>
+    <Compile Remove="Templates\**\*" />
   </ItemGroup>
 
   <ItemGroup>

@@ -58,9 +58,11 @@ public partial class SendInputKeyboard : OutputDevice
     {
       get => _value;
       set {
-        _value = value;
-        data[0].ki.dwFlags = KEYEVENTF_SCANCODE | (value == 0 ? KEYEVENTF_KEYUP : 0);
-        SendInput(1, data, Marshal.SizeOf<INPUT>());
+        if (_value != value) {
+          _value = value;
+          data[0].ki.dwFlags = KEYEVENTF_SCANCODE | (value == 0 ? KEYEVENTF_KEYUP : 0);
+          SendInput(1, data, Marshal.SizeOf<INPUT>());
+        }
       }
     }
 

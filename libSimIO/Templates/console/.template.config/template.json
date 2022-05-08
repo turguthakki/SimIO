@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Turgut Hakkı Özdemir",
+  "classifications": [ "Common", "Console" ],
+  "identity": "SimIO.ConsoleTemplate.CSharp",
+  "name": "SimIO Console Application",
+  "shortName": "simioconsole",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "ConsoleTemplate",
+  "preferNameDirectory" : true,
+  "symbols": {
+    "Version": {
+      "type": "generated",
+      "generator": "constant",
+      "replaces": "$(Version)",
+      "parameters": {
+        "value":"__VERSION__"
+      },
+      "isRequired": true
+    }
+  }
+}

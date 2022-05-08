@@ -79,6 +79,14 @@ public class RawInputMouse : RawInputDevice
     RAWMOUSE m = data->mouse;
 
     if ((m.usFlags & MOUSE_MOVE_RELATIVE) == MOUSE_MOVE_RELATIVE) {
+      // Absolute position
+      {
+        POINT pt = new POINT();
+        GetCursorPos(ref pt);
+        xPosition.setAbsoluteData(pt.x);
+        yPosition.setAbsoluteData(pt.y);
+      }
+
       // https://stackoverflow.com/questions/36862013/raw-input-and-cursor-acceleration
       float x = m.lLastX;
       float y = m.lLastY;

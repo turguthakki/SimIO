@@ -1,0 +1,117 @@
+@font-face {
+  font-family: FixedSys;
+  src: url(FixedsysX.woff);
+}
+
+.actuated {
+  color : white;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.568), 0 0 5px rgba(255, 255, 255, 0.555), 0 0 10px #0052ccb4
+}
+
+html
+{
+  font-family: FixedSys;
+  font-size: 1em;
+  color: #cfcfcf;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: rgb(34, 34, 34);
+  background: linear-gradient(45deg, rgb(20, 20, 20) 0%, rgb(37, 37, 37) 35%);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  padding-top: 2em;
+}
+
+button {
+  font-family: FixedSys;
+  font-size: 1em;
+}
+
+div.tabBar {
+  background-color: #535353;
+  padding : 0;
+  position: fixed;
+  top: 0;
+  left :0;
+  width: 100%;
+  overflow: hidden;
+}
+
+div.tabBar > button {
+  background: none;
+  border: none;
+  outline:none;
+  margin: 0;
+  padding-top : 0.5em;
+  padding-bottom: 0.5em;
+  background:none;
+  color :#bdbdbd;
+}
+
+div.tabBar > button:hover {
+  color : white;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.568), 0 0 5px rgba(255, 255, 255, 0.555), 0 0 10px #0052ccb4
+}
+
+tr.tableSeperator
+{
+  font-weight: bold;
+  color: white;
+}
+
+div.tabBar > button.active {
+  color : white;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.568), 0 0 5px rgba(255, 255, 255, 0.555), 0 0 10px #0052ccb4
+}
+
+ul.deviceList > li {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+ul.deviceList > li > p::before {
+  content: "+";
+  width: 1.5em;
+  display: inline-block;
+}
+
+ul.deviceList > li > p.expanded::before {
+  content:"-";
+  width: 1.5em;
+  display: inline-block;
+}
+
+ul.deviceList > li > div {
+  margin-left: 1.5em;
+}
+
+ul.elementList > li {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+ul.elementList > li > p::before {
+  content: "+";
+  width: 1.5em;
+  display: inline-block;
+}
+
+ul.elementList > li > p.expanded::before {
+  content:"-";
+  width: 1.5em;
+  display: inline-block;
+}
+
+ul.elementList > li > div {
+  margin-left: 1.5em;
+}

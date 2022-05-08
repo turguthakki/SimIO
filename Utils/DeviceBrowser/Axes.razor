@@ -1,0 +1,280 @@
+﻿@using System.Threading;
+@implements IDisposable
+
+<div class="tabBar">
+  <button class='@(activeTab == 0 ? "active" : "")' @onclick="() => activeTab = 0">Input Devices</button>
+  <button class='@(activeTab == 1 ? "active" : "")' @onclick="() => activeTab = 1">Output Devices</button>
+</div>
+
+<div class="tabPage" id="inputDevices" style="@getTabDisplay(0)">
+  <ul class=deviceList>
+    @foreach (var device in inputDevices) {
+      <li>
+        <p class='@(device.expanded ? "expanded" : "") @(device.actuated ? "actuated" : "")' @onclick='() => device.expanded = !device.expanded'>
+          @device.deviceType - @device.manufacturerString - @device.productString
+        </p>
+        @if (device.expanded) {
+          <div style='@(device.expanded ? "" : "display:none;")'>
+            <table>
+              <tr><td>Device ID</td><td>:</td><td>@device.identifier</td></tr>
+              <tr><td>Class</td><td>:</td><td>@device.device.GetType().FullName</td></tr>
+            </table>
+
+            <ul class="elementList">
+              @foreach (var e in device.elements) {
+                <li>
+                  <p class='@(e.expanded ? "expanded" : "") @(e.actuated ? "actuated" : "")' @onclick='() => e.expanded = !e.expanded'>
+                    @e.type @e.name
+                  </p>
+                  @if (e.expanded) {
+                    <div style='@(e.expanded ? "" : "display:none;")'>
+                      <table>
+                        @if (e.element.identifier.isKindOf<HidIdentifier>()) {
+                          var i = e.element.identifier as HidIdentifier;
+                          <tr class="tableSeperator"><td colspan="3">HID Info</td></tr>
+                          <tr><td>UsagePage</td><td>:</td><td>0x@(((int) i.usagePage).ToString("x2")) - @i.usagePage</td></tr>
+                          <tr><td>Usage</td><td>:</td><td>0x@(((int) i.usage).ToString("x2"))</td></tr>
+                        }
+
+                        <tr class="tableSeperator"><td colspan="3">Properties</td></tr>
+                        <tr><td>IsCyclic</td><td>:</td><td>@e.element.isCyclic</td></tr>
+                        <tr><td>IsRelative</td><td>:</td><td>@e.element.isRelative</td></tr>
+                        <tr><td>IsAbsolute</td><td>:</td><td>@e.element.isAbsolute</td></tr>
+                        <tr><td>IsBidirectional</td><td>:</td><td>@e.element.isBidirectional</td></tr>
+                        <tr><td>MinimumValue</td><td>:</td><td>@e.element.minimumValue.ToString("0.00")</td></tr>
+                        <tr><td>MaximumValue</td><td>:</td><td>@e.element.maximumValue.ToString("0.00")</td></tr>
+
+                        <tr class="tableSeperator"><td colspan="3">Values</td></tr>
+                        <tr><td>IsValid</td><td>:</td><td>@e.element.isValid</td></tr>
+                        <tr><td>Value</td><td>:</td><td>@e.element.value.ToString("0.00")</td></tr>
+                        <tr><td>Position</td><td>:</td><td>@e.element.position.ToString("0.00")</td></tr>
+                        <tr><td>Motion</td><td>:</td><td>@e.element.motion.ToString("0.00")</td></tr>
+                      </table>
+                    </div>
+                  }
+                </li>
+              }
+            </ul>
+
+          </div>
+        }
+      </li>
+    }
+  </ul>
+</div>
+
+<div class="tabPage" id="outputDevices" style="@getTabDisplay(1)">
+  <ul class=deviceList>
+    @foreach (var device in outputDevices) {
+      <li>
+        <p class='@(device.expanded ? "expanded" : "")' @onclick='() => device.expanded = !device.expanded'>
+          @device.deviceType
+        </p>
+        @if (device.expanded) {
+          <div style='@(device.expanded ? "" : "display:none;")'>
+            <table>
+              <tr><td>Device ID</td><td>:</td><td>@device.identifier</td></tr>
+              <tr><td>Class</td><td>:</td><td>@device.device.GetType().FullName</td></tr>
+            </table>
+
+            <ul class="elementList">
+              @foreach (var e in device.elements) {
+                <li>
+                  <p class='@(e.expanded ? "expanded" : "")' @onclick='() => e.expanded = !e.expanded'>
+                    @e.type @e.name
+                  </p>
+                  @if (e.expanded) {
+                    <div style='@(e.expanded ? "" : "display:none;")'>
+                      <table>
+                        @if (e.element.id.isKindOf<HidIdentifier>()) {
+                          var i = e.element.id as HidIdentifier;
+                          <tr class="tableSeperator"><td colspan="3">HID Info</td></tr>
+                          <tr><td>UsagePage</td><td>:</td><td>0x@(((int) i.usagePage).ToString("x2")) - @i.usagePage</td></tr>
+                          <tr><td>Usage</td><td>:</td><td>0x@(((int) i.usage).ToString("x2"))</td></tr>
+                        }
+
+                        <tr class="tableSeperator"><td colspan="3">Properties</td></tr>
+                        <tr><td>IsCyclic</td><td>:</td><td>@e.element.isCyclic</td></tr>
+                        <tr><td>IsRelative</td><td>:</td><td>@e.element.isRelative</td></tr>
+                        <tr><td>IsAbsolute</td><td>:</td><td>@e.element.isAbsolute</td></tr>
+                        @* <tr><td>IsBidirectional</td><td>:</td><td>@e.element.isBidirectional</td></tr> *@
+                        <tr><td>MinimumValue</td><td>:</td><td>@e.element.minimumValue.ToString("0.00")</td></tr>
+                        <tr><td>MaximumValue</td><td>:</td><td>@e.element.maximumValue.ToString("0.00")</td></tr>
+
+                        <tr class="tableSeperator"><td colspan="3">Values</td></tr>
+                        <tr><td>IsValid</td><td>:</td><td>@e.element.isValid</td></tr>
+                        <tr><td>Value</td><td>:</td><td>
+                          @if (e.element.minimumValue != e.element.maximumValue) {
+                            <input type="range" min="@e.element.minimumValue" max="@e.element.maximumValue" value="0" @oninput='@(v => e.element.value = float.Parse((string) v.Value))'>
+                            <span>@e.element.value.ToString("0.###")</span>
+                          }
+                          else {
+                            <input type="number" value="0" @oninput='@(v => e.element.value = float.Parse((string) v.Value))'>
+                          }
+                        </td></tr>
+                        @* <tr><td>Value</td><td>:</td><td>@e.element.value.ToString("0.00")</td></tr> *@
+                        @* <tr><td>Position</td><td>:</td><td>@e.element.position.ToString("0.00")</td></tr>
+                        <tr><td>Motion</td><td>:</td><td>@e.element.motion.ToString("0.00")</td></tr> *@
+                      </table>
+                    </div>
+                  }
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      </li>
+    }
+  </ul>
+</div>
+
+
+@code {
+  const int glowLength = 5;
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  class InputDeviceView
+  {
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public class ElementView
+    {
+      public bool expanded {get; set;} = false;
+      public InputDevice.Element element;
+
+      public string type => element.identifier.type.Name;
+      public string name => element.identifier.name;
+      public bool actuated => lastInputTick > 0;
+
+      int lastInputTick = 0;
+
+      // ---------------------------------------------------------------------
+      public ElementView(InputDevice.Element element)
+      {
+        this.element = element;
+        element.onInput += (d, e) => lastInputTick = glowLength;
+      }
+
+      // ---------------------------------------------------------------------
+      public void update()
+      {
+        if (lastInputTick > 0)
+          lastInputTick--;
+      }
+    }
+
+    public bool expanded {get; set;} = false;
+    public InputDevice device {get; private set;}
+
+    public string deviceType => device.deviceType.Name;
+    public string identifier => device.deviceIdentifier;
+    public string manufacturerString => (device as RawInputDevice)?.manufacturerString;
+    public string productString => (device as RawInputDevice)?.productString;
+    public bool actuated => lastInputTick > 0;
+
+
+    public ElementView[] elements = new ElementView[] {};
+
+    int lastInputTick = 0;
+
+    // -----------------------------------------------------------------------
+    public InputDeviceView(InputDevice device)
+    {
+      this.device = device;
+      this.device.onInput += (d, e) => lastInputTick = glowLength;
+      elements = device.elements.Select(e => new ElementView(e)).ToArray();
+    }
+
+    // -----------------------------------------------------------------------
+    public void update()
+    {
+      if (lastInputTick > 0)
+        lastInputTick--;
+      foreach(var e in elements)
+        e.update();
+    }
+  };
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  class OutputDeviceView
+  {
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public class ElementView
+    {
+      public bool expanded {get; set;} = false;
+      public OutputDevice.Element element;
+
+      public string type => element.id.type.Name;
+      public string name => element.id.name;
+
+      // ---------------------------------------------------------------------
+      public ElementView(OutputDevice.Element element)
+      {
+        this.element = element;
+      }
+    }
+
+    public bool expanded {get; set;} = false;
+    public OutputDevice device {get; private set;}
+
+    public string deviceType => device.deviceType.Name;
+    public string identifier => device.deviceIdentifier;
+
+    public ElementView[] elements = new ElementView[] {};
+
+    // -----------------------------------------------------------------------
+    public OutputDeviceView(OutputDevice device)
+    {
+      this.device = device;
+      elements = device.elements.Select(e => new ElementView(e)).ToArray();
+    }
+  };
+
+  bool running = true;
+  int activeTab = 0;
+  InputDeviceView[] inputDevices = new InputDeviceView[] {};
+  OutputDeviceView[] outputDevices = new OutputDeviceView[] {};
+
+  // -------------------------------------------------------------------------
+  string getTabDisplay(int tab) => activeTab == tab ? "" : "display : none;";
+
+  // -------------------------------------------------------------------------
+  void refreshInputDevices()
+  {
+    inputDevices = SimIO.inputDevices.Select(d => new InputDeviceView(d)).ToArray();
+  }
+
+  // -------------------------------------------------------------------------
+  void refreshOutputDevices()
+  {
+    outputDevices = SimIO.outputDevices.Select(d => new OutputDeviceView(d)).ToArray();
+  }
+
+  // -------------------------------------------------------------------------
+  protected override void OnInitialized()
+  {
+    SimIO.inputDevicesChanged += (d) => refreshInputDevices();
+    SimIO.outputDevicesChanged += (d) => refreshOutputDevices();
+    refreshInputDevices();
+    refreshOutputDevices();
+
+    SimIO.onInput += (d, e) => InvokeAsync(StateHasChanged);
+
+    new Thread(() => {
+      while(running) {
+        foreach(var d in inputDevices) {
+          d.update();
+        }
+        InvokeAsync(StateHasChanged);
+        Thread.Sleep(16);
+      }
+    }).Start();
+    base.OnInitialized();
+    InvokeAsync(StateHasChanged);
+  }
+
+  // -------------------------------------------------------------------------
+  public void Dispose()
+  {
+    running = false;
+  }
+}

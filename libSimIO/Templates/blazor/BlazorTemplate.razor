@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Components;
+@using Microsoft.AspNetCore.Components.Web;
+@using System.Threading;
+@implements IDisposable;
+
+<div class="warning" style='display : @((ApplicationState.gameStarted ? "none" : "block"))'>
+  GAME IS NOT STARTED
+</div>
+
+<div class="axisBackground" style="width : 500px; height : 5px;"></div>
+<div class="axisBackground" style="width : 5px; height : 500px;"></div>
+<div class="axisContainer" style="width : 500px; height : 5px;">
+  <div class="horizontalAxis" style="transform : scaleX(@(ApplicationState.xAxis.value));"></div>
+</div>
+<div class="axisContainer" style="width : 5px; height : 500px;">
+  <div class="verticalAxis" style="transform : scaleY(@(-ApplicationState.yAxis.value));"></div>
+</div>
+
+<div class="buttonBar">
+  <button @onclick="(args) => sendKey(Keyboard.digit1)">1 Key</button>
+  <button @onclick="(args) => sendKey(Keyboard.digit2)">2 Key</button>
+  <button @onclick="(args) => sendKey(Keyboard.digit3)">3 Key</button>
+  <button @onclick="(args) => sendKey(Keyboard.digit4)">4 Key</button>
+</div>
+
+@code {
+  bool running = true;
+  Queue<HidIdentifier> keyQueue = new Queue<HidIdentifier>();
+  OutputDevice.Element currentKey = null;
+  int keyDelay;
+
+  void sendKey(HidIdentifier key)
+  {
+    keyQueue.Enqueue(key);
+  }
+
+  protected override void OnInitialized()
+  {
+    SimIO.onInput += (d, e) => InvokeAsync(StateHasChanged);
+
+    new Thread(() => {
+      while(running) {
+        if (currentKey == null && keyQueue.Count > 0) {
+          HidIdentifier keyId = keyQueue.Dequeue();
+          currentKey = ApplicationState.oKeyboard.elements.First(e => e.id == keyId);
+          currentKey.value = 1;
+          keyDelay = 5;
+        }
+        if (currentKey != null && keyDelay-- <= 0) {
+          currentKey.value = 0;
+          currentKey = null;
+        }
+
+        Thread.Sleep(16);
+      }
+    }).Start();
+
+    base.OnInitialized();
+  }
+
+  public void Dispose() => running = false;
+}

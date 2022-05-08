@@ -1,0 +1,27 @@
+<Project>
+  <UsingTask
+    TaskName="Transform"
+    TaskFactory="RoslynCodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <In ParameterType="System.String" Required="true" />
+      <Out ParameterType="System.String" Required="true" />
+      <From ParameterType="System.String" Required="true" />
+      <To ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System"/>
+      <Using Namespace="System.IO"/>
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+          Directory.CreateDirectory(Path.GetDirectoryName(Out));
+          File.WriteAllText(
+            Out,
+            Regex.Replace(File.ReadAllText(In), From, To)
+            );
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+</Project>

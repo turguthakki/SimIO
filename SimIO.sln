@@ -11,6 +11,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicUse", "Examples\BasicU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InputModifiers", "Examples\InputModifiers\InputModifiers.csproj", "{6AEACDF8-653A-4AD3-BD05-35127FC06FCB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{4B505D13-8F42-4C50-8196-1EF97B63E09A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceBrowser", "Utils\DeviceBrowser\DeviceBrowser.csproj", "{2F05C06C-9DFD-409A-B08C-A23AD195010D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{2146AE71-049A-434B-A0CC-2DD8A25109E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorTemplate", "libSimIO\Templates\blazor\BlazorTemplate.csproj", "{BA1FEF43-0093-43C6-B47A-DC8FAE40CAA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -29,6 +37,14 @@ Global
 		{6AEACDF8-653A-4AD3-BD05-35127FC06FCB}.Debug|x64.Build.0 = Debug|x64
 		{6AEACDF8-653A-4AD3-BD05-35127FC06FCB}.Release|x64.ActiveCfg = Release|x64
 		{6AEACDF8-653A-4AD3-BD05-35127FC06FCB}.Release|x64.Build.0 = Release|x64
+		{2F05C06C-9DFD-409A-B08C-A23AD195010D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2F05C06C-9DFD-409A-B08C-A23AD195010D}.Debug|x64.Build.0 = Debug|Any CPU
+		{2F05C06C-9DFD-409A-B08C-A23AD195010D}.Release|x64.ActiveCfg = Release|Any CPU
+		{2F05C06C-9DFD-409A-B08C-A23AD195010D}.Release|x64.Build.0 = Release|Any CPU
+		{BA1FEF43-0093-43C6-B47A-DC8FAE40CAA1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BA1FEF43-0093-43C6-B47A-DC8FAE40CAA1}.Debug|x64.Build.0 = Debug|Any CPU
+		{BA1FEF43-0093-43C6-B47A-DC8FAE40CAA1}.Release|x64.ActiveCfg = Release|Any CPU
+		{BA1FEF43-0093-43C6-B47A-DC8FAE40CAA1}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +52,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8FDA05F6-6C03-4554-BAE3-16CBE6DEF963} = {D4556C26-B998-4333-AE4F-9D18488C8F98}
 		{6AEACDF8-653A-4AD3-BD05-35127FC06FCB} = {D4556C26-B998-4333-AE4F-9D18488C8F98}
+		{2F05C06C-9DFD-409A-B08C-A23AD195010D} = {4B505D13-8F42-4C50-8196-1EF97B63E09A}
+		{BA1FEF43-0093-43C6-B47A-DC8FAE40CAA1} = {2146AE71-049A-434B-A0CC-2DD8A25109E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3F0A3D06-046F-4FB5-A126-C44BDC254EBF}
