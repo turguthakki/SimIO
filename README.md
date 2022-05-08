@@ -10,6 +10,19 @@ Can read input from Keyboard, mouse or HID compatible devices via Rawinput and w
  * [vJoy](http://vjoystick.sourceforge.net/joomla/) must be installed on the system.
  * Unlike GlovePIE and FreePIE SimIO does not provide any user interface or editor.
 
+## Installation
+``` console
+$ dotnet -i new simio
+```
+
+then for each new project
+``` console
+$ dotnet new simioconsole
+```
+or
+``` console
+$ dotnet new simioblazor
+```
 
 Code Example
 
@@ -49,3 +62,5 @@ public class BasicUse
   }
 }
 ```
+
+[Changelog](CHANGELOG.md)

@@ -63,7 +63,7 @@ class DB
       ResumeLayout();
 
       var services = new ServiceCollection();
-      services.AddBlazorWebView();
+      services.AddWindowsFormsBlazorWebView();
 
       webView.HostPage = @"wwwroot/index.html";
       webView.Services = services.BuildServiceProvider();
