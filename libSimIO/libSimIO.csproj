@@ -23,7 +23,7 @@
     <RepositoryType>git</RepositoryType>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageLicenseExpression>Zlib</PackageLicenseExpression>
-
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
 
   <Target Name="Config" BeforeTargets="Build">
