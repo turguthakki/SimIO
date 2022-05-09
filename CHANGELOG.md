@@ -14,3 +14,6 @@
 ## 0.7.3
   * Fixed Blazor template
   * Updated reference for Microsoft.AspNetCore.Components.WebView.WindowsForms
+
+## 0.7.4-Dev
+  * Project manager (WIP)

@@ -1,0 +1,31 @@
+@font-face {
+  font-family: FixedSys;
+  src: url(FixedsysX.woff);
+}
+
+html
+{
+  font-family: "Calibri";
+  color: black;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #D4D0CB;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.white-card {
+  padding: 10px;
+  margin : 6px;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}

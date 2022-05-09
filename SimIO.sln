@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{4B505D13
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceBrowser", "Utils\DeviceBrowser\DeviceBrowser.csproj", "{2F05C06C-9DFD-409A-B08C-A23AD195010D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManager", "Utils\ProjectManager\ProjectManager.csproj", "{6CDF5A77-D8C7-4C7F-A8ED-35520AD2B613}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -37,6 +39,10 @@ Global
 		{2F05C06C-9DFD-409A-B08C-A23AD195010D}.Debug|x64.Build.0 = Debug|Any CPU
 		{2F05C06C-9DFD-409A-B08C-A23AD195010D}.Release|x64.ActiveCfg = Release|Any CPU
 		{2F05C06C-9DFD-409A-B08C-A23AD195010D}.Release|x64.Build.0 = Release|Any CPU
+		{6CDF5A77-D8C7-4C7F-A8ED-35520AD2B613}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6CDF5A77-D8C7-4C7F-A8ED-35520AD2B613}.Debug|x64.Build.0 = Debug|Any CPU
+		{6CDF5A77-D8C7-4C7F-A8ED-35520AD2B613}.Release|x64.ActiveCfg = Release|Any CPU
+		{6CDF5A77-D8C7-4C7F-A8ED-35520AD2B613}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,6 +51,7 @@ Global
 		{8FDA05F6-6C03-4554-BAE3-16CBE6DEF963} = {D4556C26-B998-4333-AE4F-9D18488C8F98}
 		{6AEACDF8-653A-4AD3-BD05-35127FC06FCB} = {D4556C26-B998-4333-AE4F-9D18488C8F98}
 		{2F05C06C-9DFD-409A-B08C-A23AD195010D} = {4B505D13-8F42-4C50-8196-1EF97B63E09A}
+		{6CDF5A77-D8C7-4C7F-A8ED-35520AD2B613} = {4B505D13-8F42-4C50-8196-1EF97B63E09A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3F0A3D06-046F-4FB5-A126-C44BDC254EBF}

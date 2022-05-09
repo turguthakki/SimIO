@@ -1,0 +1,54 @@
+@* ######################################################################## *@
+<style>
+.project-list-container {
+  display:flex;
+  flex-direction: column;
+  min-width: 20em;
+  background-color: #f1ede7;
+}
+
+.project-list-list {
+  display:flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  gap:10px;
+}
+
+.project-list-actions {
+  display: flex;
+  justify-content: flex-end;
+  overflow: hidden;
+  gap : 5px;
+}
+
+</style>
+
+@* ######################################################################## *@
+<div class="@(@class) project-list-container">
+  <div class="project-list-list">
+    @foreach(Project project in Project.projects) {
+      <ProjectListItem project=@project/>
+    }
+  </div>
+  <div class="project-list-actions white-card">
+    <button>🗋</button>
+    <button>🗑</button>
+  </div>
+</div>
+
+@* ######################################################################## *@
+@code {
+  [Parameter]
+  public string @class {get; set;}
+
+  // -------------------------------------------------------------------------
+  protected override void OnInitialized()
+  {
+    base.OnInitialized();
+    InvokeAsync(StateHasChanged);
+    Project.onProjectsChanged += () => {
+      InvokeAsync(StateHasChanged);
+    };
+  }
+}
