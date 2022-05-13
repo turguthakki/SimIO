@@ -1,0 +1,121 @@
+@* ----------------------------------------------------------------------- *
+
+    * NewProjectDialog.razor
+
+    ----------------------------------------------------------------------
+
+    Copyright (C) 2022, Turgut Hakki Ozdemir
+    All Rights Reserved.
+
+    THIS SOFTWARE IS PROVIDED 'AS-IS', WITHOUT ANY EXPRESS
+    OR IMPLIED WARRANTY. IN NO EVENT WILL THE AUTHOR(S) BE HELD LIABLE FOR
+    ANY DAMAGES ARISING FROM THE USE OR DISTRIBITION OF THIS SOFTWARE
+
+    Permission is granted to anyone to use this software for any purpose,
+    including commercial applications, and to alter it and redistribute it
+    freely, subject to the following restrictions:
+
+    1. The origin of this software must not be misrepresented; you must not
+       claim that you wrote the original software.
+    2. Altered source versions must be plainly marked as such, and must not be
+       misrepresented as being the original software.
+    4. Distributions in binary form must reproduce the above copyright notice
+       and an acknowledgment of use of this software either in documentation
+       or binary form itself.
+    3. This notice may not be removed or altered from any source distribution.
+
+    Turgut Hakkı Özdemir <turgut.hakki@gmail.com>
+
+* ------------------------------------------------------------------------- *@
+@namespace th.SimIO.ProjectManager
+@inherits SimIOWindowLayout
+
+@* ######################################################################## *@
+<div class="container">
+  <div>
+    <div>Project Name</div>
+    <TextField @ref="projectNameField" valueChanged="update"/>
+  </div>
+
+  <div>
+    <div>Template</div>
+    <select name="template" id="template">
+      <option value="simioconsole">Console</option>
+      <option value="simioblazor">Blazor</option>
+    </select>
+  </div>
+
+  <div>
+    <div>Projects directory</div>
+    <DirectorySelector @ref="projectsDirectorySelector" window=@window mustExist=true pathChanged="update"/>
+  </div>
+
+  <div>
+    <div>ProjectFile</div>
+    <TextField @ref="projectFile" value="@projectFilePath" errorMessage="@projectFilePathError" readOnly=true/>
+  </div>
+
+  <div class="dialog-response">
+    <div>
+      <button @onclick="create">Create</button>
+      <button @onclick="cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+@* ######################################################################## *@
+@code{
+  DirectorySelector projectsDirectorySelector;
+  TextField projectNameField;
+  TextField projectFile;
+
+  // -------------------------------------------------------------------------
+  string projectName => string.IsNullOrWhiteSpace(projectNameField?.value) ? "" : projectNameField.value.Trim();
+
+  // -------------------------------------------------------------------------
+  string projectFilePath => !string.IsNullOrWhiteSpace(projectName) ? $@"{projectsDirectorySelector?.path}\{projectName}\{projectName}.csproj" : "";
+
+  // -------------------------------------------------------------------------
+  string projectFilePathError {
+    get {
+      if (projectName.IndexOfAny(Path.GetInvalidFileNameChars()) > 0) {
+        return "Invalid file name";
+      }
+      @* else if (projectName.Length > 0 && !char.IsUpper(projectName[0])) {
+        return "Project name must start with a capital letter";
+      } *@
+      return null;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  void create()
+  {
+  }
+
+  // -------------------------------------------------------------------------
+  void cancel()
+  {
+    window.Close();
+  }
+
+  // -------------------------------------------------------------------------
+  void update()
+  {
+    @* Console.WriteLine(projectName.value); *@
+    @* projectName.errorMessage = projectName.value; *@
+    InvokeAsync(StateHasChanged);
+  }
+
+  // -------------------------------------------------------------------------
+  protected override void OnInitialized()
+  {
+    base.OnInitialized();
+    InvokeAsync(StateHasChanged);
+    Project.onProjectsChanged += () => {
+      InvokeAsync(StateHasChanged);
+    };
+    window.Text = "Create New Project";
+    projectsDirectorySelector.path = ProjectManager.settings.projectsPath;
+  }
+}

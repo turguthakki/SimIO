@@ -73,7 +73,7 @@ static class ProjectManager
   }
 
   // -------------------------------------------------------------------------
-  public static Window window {get; private set;} = new Window();
+  public static MainWindow mainWindow {get; private set;} = new MainWindow();
   public static Settings settings {get; private set;} = new Settings();
   public static bool initialized {get; private set;} = false;
   public static event Action onStateChanged = delegate {};
@@ -111,7 +111,7 @@ static class ProjectManager
 
     initialize();
 
-    Application.Run(window);
+    Application.Run(mainWindow);
     settings.save();
   }
 }

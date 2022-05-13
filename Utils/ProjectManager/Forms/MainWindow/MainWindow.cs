@@ -31,7 +31,7 @@
 namespace th.SimIO.ProjectManager {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class Window : Form
+class MainWindow : Window
 {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   class Settings : th.SimIO.ProjectManager.GlobalSettings
@@ -43,33 +43,17 @@ class Window : Form
     public int height {get; set;}
   }
 
-  public BlazorWebView webView {get; private set;}
-  string registryKey = @"HKEY_CURRENT_USER\SOFTWARE\SimIO\DeviceBrowser";
   Settings settings = new Settings();
 
   // -------------------------------------------------------------------------
-  public Window()
+  public MainWindow() : base(typeof(MainWindowLayout))
   {
-    SuspendLayout();
-    Controls.Add(webView = new BlazorWebView());
-    webView.Dock = DockStyle.Fill;
     Size = new Size(800, 600);
-    Text = "SimIO Device Browser";
-    ResumeLayout();
-
-    var services = new ServiceCollection();
-    services.AddWindowsFormsBlazorWebView();
-
-    webView.HostPage = @"wwwroot/index.html";
-    webView.Services = services.BuildServiceProvider();
-    webView.RootComponents.Add<MainLayout>("#app");
 
     new System.Windows.Forms.Timer() {
       Interval = 16,
       Enabled = true
     }.Tick += (s, a) => SimIO.update();
-
-    Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
   }
 
   // -------------------------------------------------------------------------
@@ -88,11 +72,13 @@ class Window : Form
   protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
   {
     if (WindowState != FormWindowState.Minimized) {
-      settings.top = Top;
-      settings.left = Left;
-      settings.width = Width;
-      settings.height = Height;
       settings.maximized = WindowState == FormWindowState.Maximized;
+      if (!settings.maximized) {
+        settings.top = Top;
+        settings.left = Left;
+        settings.width = Width;
+        settings.height = Height;
+      }
       settings.save();
     }
   }

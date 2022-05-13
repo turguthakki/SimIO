@@ -1,0 +1,102 @@
+@* ----------------------------------------------------------------------- *
+
+    * DirectorySelector.razor
+
+    ----------------------------------------------------------------------
+
+    Copyright (C) 2022, Turgut Hakki Ozdemir
+    All Rights Reserved.
+
+    THIS SOFTWARE IS PROVIDED 'AS-IS', WITHOUT ANY EXPRESS
+    OR IMPLIED WARRANTY. IN NO EVENT WILL THE AUTHOR(S) BE HELD LIABLE FOR
+    ANY DAMAGES ARISING FROM THE USE OR DISTRIBITION OF THIS SOFTWARE
+
+    Permission is granted to anyone to use this software for any purpose,
+    including commercial applications, and to alter it and redistribute it
+    freely, subject to the following restrictions:
+
+    1. The origin of this software must not be misrepresented; you must not
+       claim that you wrote the original software.
+    2. Altered source versions must be plainly marked as such, and must not be
+       misrepresented as being the original software.
+    4. Distributions in binary form must reproduce the above copyright notice
+       and an acknowledgment of use of this software either in documentation
+       or binary form itself.
+    3. This notice may not be removed or altered from any source distribution.
+
+    Turgut Hakkı Özdemir <turgut.hakki@gmail.com>
+
+* ------------------------------------------------------------------------ *@
+@namespace th.SimIO.ProjectManager
+
+@* ######################################################################## *@
+<div ComponentName='@(GetType().Name)' class='@($"{@class} {GetType().Name} container")'>
+  <TextField @bind-value="path" errorMessage="@errorMessage"/>
+  <button @onclick="selectDirectory">...</button>
+</div>
+
+@* ######################################################################## *@
+@code {
+  string _path;
+
+  // -------------------------------------------------------------------------
+  [Parameter]
+  public string @class {get; set;}
+  [Parameter]
+  public Window window {get; set;}
+  [Parameter]
+  public bool mustExist {get; set;} = false;
+  [Parameter]
+  public bool mustBeEmpty {get; set;} = false;
+
+  // -------------------------------------------------------------------------
+  [Parameter]
+  public string path {
+    get => _path;
+    set {
+      if (_path != value) {
+        _path = value;
+        pathChanged.InvokeAsync();
+      }
+    }
+  }
+
+  [Parameter]
+  public EventCallback<string> pathChanged {get; set;}
+
+  // -------------------------------------------------------------------------
+  public bool exists => Directory.Exists(_path);
+  public bool empty => !exists || new DirectoryInfo(path).GetFileSystemInfos().Length == 0;
+
+  // -------------------------------------------------------------------------
+  string errorMessage {
+    get {
+      if (mustExist && !exists) {
+        return "Directory does not exists";
+      }
+      else if (mustBeEmpty && !empty) {
+        return "Directory must be empty";
+      }
+      return null;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  void selectDirectory()
+  {
+    var dialog = new FolderBrowserDialog();
+    dialog.SelectedPath = path;
+    var result = dialog.ShowDialog();
+    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath)) {
+      path = dialog.SelectedPath;
+      InvokeAsync(StateHasChanged);
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  protected override void OnInitialized()
+  {
+    base.OnInitialized();
+    InvokeAsync(StateHasChanged);
+  }
+}
