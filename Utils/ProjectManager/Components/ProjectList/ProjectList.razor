@@ -50,6 +50,9 @@
     Window window = new Window(typeof(NewProjectDialog));
     window.Width = 640;
     window.Height = 480;
+    window.FormClosing += (s, e) => {
+      InvokeAsync(StateHasChanged);
+    };
     mainWindow.showDialog(window);
   }
 

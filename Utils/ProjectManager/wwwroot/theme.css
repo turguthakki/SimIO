@@ -1,4 +1,5 @@
 :root {
+  --ui-font-color : black;
   --window-background : #D4D0CB;
   --panel-background : #f1ede7;
   --shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
@@ -23,7 +24,7 @@
 
 html {
   font-family: 'UIFont';
-  color: black;
+  color: var(--ui-font-color);
   background: var(--window-background);
   background-attachment: fixed;
   background-position: center;
@@ -69,7 +70,6 @@ button {
   display: inline-block;
   outline: 0;
   border: 1px solid darkgray;
-  cursor: pointer;
   color: black;
   margin: 0.25em;
   padding: 0.25em;
@@ -79,16 +79,24 @@ button {
   transition: var(--animation_one)
 }
 
-button:focus {
+button:not([disabled]) {
+  cursor: pointer;
+}
+
+button:disabled {
+  background-image: linear-gradient(180deg,#e2e2e2,#d1cfcf);
+}
+
+button:focus:not([disabled]) {
   border: 1px solid black;
   box-shadow: var(--focus-shadow);
 }
 
-button:hover {
+button:hover:not([disabled]) {
   box-shadow: var(--hover-shadow);
 }
 
-button:active {
+button:active:not([disabled]) {
   background-image: linear-gradient(180deg,#fafafa,#f0f0f0);
 }
 

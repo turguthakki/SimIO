@@ -39,7 +39,7 @@
 
   <div>
     <div>Template</div>
-    <select name="template" id="template">
+    <select name="template" @bind="selectedTemplate">
       <option value="simioconsole">Console</option>
       <option value="simioblazor">Blazor</option>
     </select>
@@ -57,7 +57,7 @@
 
   <div class="dialog-response">
     <div>
-      <button @onclick="create">Create</button>
+      <button @onclick="create" disabled=@(String.IsNullOrEmpty(projectName) || projectFilePathError != null)>Create</button>
       <button @onclick="cancel">Cancel</button>
     </div>
   </div>
@@ -68,6 +68,7 @@
   DirectorySelector projectsDirectorySelector;
   TextField projectNameField;
   TextField projectFile;
+  string selectedTemplate = "simioconsole";
 
   // -------------------------------------------------------------------------
   string projectName => string.IsNullOrWhiteSpace(projectNameField?.value) ? "" : projectNameField.value.Trim();
@@ -78,7 +79,7 @@
   // -------------------------------------------------------------------------
   string projectFilePathError {
     get {
-      if (projectName.IndexOfAny(Path.GetInvalidFileNameChars()) > 0) {
+      if (projectFilePath.IndexOfAny(Path.GetInvalidPathChars()) > 0 || projectName.IndexOfAny(Path.GetInvalidFileNameChars()) > 0) {
         return "Invalid file name";
       }
       @* else if (projectName.Length > 0 && !char.IsUpper(projectName[0])) {
@@ -91,6 +92,8 @@
   // -------------------------------------------------------------------------
   void create()
   {
+    new Project(projectFilePath, selectedTemplate);
+    window.Close();
   }
 
   // -------------------------------------------------------------------------
@@ -102,8 +105,6 @@
   // -------------------------------------------------------------------------
   void update()
   {
-    @* Console.WriteLine(projectName.value); *@
-    @* projectName.errorMessage = projectName.value; *@
     InvokeAsync(StateHasChanged);
   }
 
