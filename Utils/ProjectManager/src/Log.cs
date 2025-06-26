@@ -33,22 +33,60 @@ namespace th.SimIO.ProjectManager {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 public class Log
 {
-  enum Type {
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  public enum Type {
     INFO,
     WARNING,
     ERROR
   }
 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  public class Message
+  {
+    public Type type {get; private set;}
+    public DateTime time {get; private set;}
+    public string message {get; private set;}
+
+    // -----------------------------------------------------------------------
+    public Message(Type type, DateTime time, string message)
+    {
+      this.type = type;
+      this.time = time;
+      this.message = message;
+    }
+
+    // -----------------------------------------------------------------------
+    public override string ToString() => time.ToString(System.Globalization.CultureInfo.InvariantCulture) + " " + type.ToString() + " : " + message;
+  }
+
+  // -------------------------------------------------------------------------
+  static List<Message> messageList = new List<Message>();
+
   // -------------------------------------------------------------------------
   static void log(Type type, string log)
   {
-    Console.WriteLine(DateTime.UtcNow.ToString(System.Globalization.CultureInfo.InvariantCulture) + " " + type.ToString() + " : " + log);
+    Message msg;
+    messageList.Add(msg = new Message(type, DateTime.UtcNow, log));
+    Console.WriteLine(msg);
+    onNewLogMessage(msg);
   }
+
+  // -------------------------------------------------------------------------
+  public static IEnumerable<Message> messages => messageList.ToArray();
+
+  // -------------------------------------------------------------------------
+  public static event Action<Message> onNewLogMessage = delegate {};
 
   // -------------------------------------------------------------------------
   public static void info(object message) => log(Type.INFO, message.ToString());
   public static void warning(object message) => log(Type.WARNING, message.ToString());
   public static void error(object message) => log(Type.ERROR, message.ToString());
+
+  // -------------------------------------------------------------------------
+  public static void clear()
+  {
+    messageList.Clear();
+  }
 }
 
 } // End of namespace th.SimIO.ProjectManager

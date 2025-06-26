@@ -37,7 +37,10 @@
 <div class="main" style='display : @((ProjectManager.initialized ? "block" : "none"))'>
   <div></div>
     <div class="projects">
-      <div><SelectedProject/></div>
+      <div class="settings-and-log">
+        <ProjectSettings/>
+        <LogDisplay/>
+      </div>
       <div><ProjectList/></div>
     </div>
   <div></div>

@@ -1,6 +1,6 @@
 @* ----------------------------------------------------------------------- *
 
-    * DirectorySelector.razor
+    * LogDisplay.razor
 
     ----------------------------------------------------------------------
 
@@ -31,72 +31,27 @@
 
 @* ######################################################################## *@
 <div ComponentName='@(GetType().Name)' class='@($"{@class} {GetType().Name} container")'>
-  <TextField
-    @bind-value="path"
-    errorMessage="@errorMessage"
-    autoFocus=@autoFocus
-  />
-  <button @onclick="selectDirectory">...</button>
+  <div class="logs">
+    @foreach(Log.Message msg in Log.messages) {
+      <div class="log-line @logTypeClass(msg)">@msg.message</div>
+    }
+  </div>
 </div>
 
 @* ######################################################################## *@
 @code {
-  string _path;
-
-  // -------------------------------------------------------------------------
-  [Parameter]
+[Parameter]
   public string @class {get; set;}
-  [Parameter]
-  public Window window {get; set;}
-  [Parameter]
-  public bool mustExist {get; set;} = false;
-  [Parameter]
-  public bool mustBeEmpty {get; set;} = false;
-  [Parameter]
-  public bool autoFocus {get; set;}
 
   // -------------------------------------------------------------------------
-  [Parameter]
-  public string path {
-    get => _path;
-    set {
-      if (_path != value) {
-        pathChanged.InvokeAsync(_path = value);
-      }
-    }
-  }
-
-  [Parameter]
-  public EventCallback<string> pathChanged {get; set;}
-
-  // -------------------------------------------------------------------------
-  public bool exists => Directory.Exists(_path);
-  public bool empty => !exists || new DirectoryInfo(path).GetFileSystemInfos().Length == 0;
-  public bool hasError => !String.IsNullOrWhiteSpace(errorMessage);
-
-  // -------------------------------------------------------------------------
-  public string errorMessage {
-    get {
-      if (mustExist && !exists) {
-        return "Directory does not exists";
-      }
-      else if (mustBeEmpty && !empty) {
-        return "Directory must be empty";
-      }
-      return null;
-    }
-  }
-
-  // -------------------------------------------------------------------------
-  void selectDirectory()
+  public string logTypeClass(Log.Message message)
   {
-    var dialog = new FolderBrowserDialog();
-    dialog.SelectedPath = path;
-    var result = dialog.ShowDialog();
-    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath)) {
-      path = dialog.SelectedPath;
-      InvokeAsync(StateHasChanged);
+    switch(message.type) {
+      case Log.Type.INFO : return "log-info";
+      case Log.Type.WARNING : return "log-warning";
+      case Log.Type.ERROR : return "log-error";
     }
+    return "";
   }
 
   // -------------------------------------------------------------------------
@@ -104,5 +59,8 @@
   {
     base.OnInitialized();
     InvokeAsync(StateHasChanged);
+    Log.onNewLogMessage += (m) => {
+      InvokeAsync(StateHasChanged);
+    };
   }
 }

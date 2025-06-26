@@ -30,7 +30,7 @@
 @namespace th.SimIO.ProjectManager
 
 @* ######################################################################## *@
-<div class="container card">
+<div ComponentName='@(GetType().Name)' class='@($"{@class} {GetType().Name} container") card @(statusClass)'>
   <div class="project-name-container">
     <div class="project-name">@project.name</div>
     <div class="project-folder">@project.projectFolder</div>
@@ -38,25 +38,75 @@
   </div>
 
   <div class="actions">
-    <button>⚙</button>
-    <button>🖉</button>
-    <button>🔧</button>
-    <button>⯈</button>
+    <button @onclick='showProjectSettings'>⚙</button>
+    <button @onclick='editProject'>🖉</button>
+    <button @onclick='buildProject'>@(project.building ? "■" : "🔧")</button>
+    <button @onclick='runProject'>@(project.running ? "■" : "⯈")</button>
   </div>
 </div>
 
 @* ######################################################################## *@
 @code {
   [Parameter]
+  public string @class {get; set;}
+
+  [Parameter]
   public Project project {get; set;}
+
+  [Parameter]
+  public ProjectList projectList {get; set;}
+
+  // -------------------------------------------------------------------------
+  string statusClass {
+    get {
+      if (project.building)
+        return "project-building";
+      else if (project.running)
+        return "project-running";
+      return "";
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  void showProjectSettings()
+  {
+  }
+
+  // -------------------------------------------------------------------------
+  void editProject()
+  {
+  }
+
+  // -------------------------------------------------------------------------
+  void buildProject()
+  {
+    if (project.building)
+      project.kill();
+    else
+      project.build();
+  }
+
+  // -------------------------------------------------------------------------
+  void runProject()
+  {
+    if (project.running)
+      project.kill();
+    else
+      project.run();
+  }
+
+  // -------------------------------------------------------------------------
+  void update()
+  {
+    InvokeAsync(StateHasChanged);
+  }
 
   // -------------------------------------------------------------------------
   protected override void OnInitialized()
   {
     base.OnInitialized();
-    InvokeAsync(StateHasChanged);
-    Project.onProjectsChanged += () => {
-      InvokeAsync(StateHasChanged);
-    };
+    update();
+    project.onStateChanged += update;
+    ProjectManager.onProjectsChanged += update;
   }
 }

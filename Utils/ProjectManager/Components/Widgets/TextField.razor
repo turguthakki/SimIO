@@ -37,6 +37,7 @@
     @bind-value:event="oninput"
     style="style='@((!String.IsNullOrWhiteSpace(errorMessage)) ? "color : var(--input-text-error-color)" : "")'"
     readonly=@readOnly
+    autofocus=@autoFocus
     />
 </div>
 
@@ -63,6 +64,8 @@
   // -------------------------------------------------------------------------
   [Parameter]
   public bool readOnly {get; set;}
+  [Parameter]
+  public bool autoFocus {get; set;}
 
   // -------------------------------------------------------------------------
   [Parameter]
@@ -79,6 +82,9 @@
       }
     }
   }
+
+  // -------------------------------------------------------------------------
+  public bool hasError => !String.IsNullOrWhiteSpace(errorMessage);
 
   // -------------------------------------------------------------------------
   protected override void OnInitialized()

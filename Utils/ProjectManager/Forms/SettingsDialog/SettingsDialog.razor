@@ -1,6 +1,6 @@
 @* ----------------------------------------------------------------------- *
 
-    * NewProjectDialog.razor
+    * GeneralSettings.razor
 
     ----------------------------------------------------------------------
 
@@ -26,87 +26,73 @@
 
     Turgut Hakkı Özdemir <turgut.hakki@gmail.com>
 
-* ------------------------------------------------------------------------- *@
+* ------------------------------------------------------------------------ *@
 @namespace th.SimIO.ProjectManager
 @inherits SimIOWindowLayout
 
 @* ######################################################################## *@
-<div class="container">
-  <div @onkeypress='keyHandler'>
-    <div>Project Name</div>
-    <TextField @ref="projectNameField" valueChanged="update" autoFocus=true/>
+<div ComponentName='@(GetType().Name)' class='@($"{@class} {GetType().Name} container")'>
+  <div class="card">
+    <label>Application Settings</label>
+    <div class="property-page">
+      <label>Projects directory</label> <DirectorySelector @ref="projectsDirectorySelector" window=@window mustExist=true @bind-path="settings.projectsPath"/>
+    </div>
   </div>
 
-  <div>
-    <div>Template</div>
-    <select name="template" @bind="selectedTemplate">
-      <option value="simioconsole">Console</option>
-      <option value="simioblazor">Blazor</option>
-    </select>
-  </div>
-
-  <div @onkeypress='keyHandler'>
-    <div>ProjectFile</div>
-    <TextField @ref="projectFile" value="@projectFilePath" errorMessage="@projectFilePathError" readOnly=true/>
+  <div class="card">
+    <label>Project settings</label>
+    <div class="property-page">
+      <label>Watch project directory</label> <input type="checkbox" checked='@settings.watchProjectDirectory' @bind-value="settings.watchProjectDirectory" @bind-value:event="oninput">
+      <label>Watch subdirectories</label> <input type="checkbox" checked='@settings.watchSubDirectories' @bind-value="settings.watchSubDirectories" @bind-value:event="oninput">
+      <label>Watch filter</label> <TextField @bind-value="settings.watchFilter"/>
+      <label>Rebuild project on change</label> <input type="checkbox" checked='@settings.rebuildProjectsOnChange' @bind-value="settings.rebuildProjectsOnChange" @bind-value:event="oninput">
+      <label>Run project on change</label> <input type="checkbox" checked='@settings.runProjectsOnChange' @bind-value="settings.runProjectsOnChange" @bind-value:event="oninput">
+    </div>
   </div>
 
   <div class="dialog-response">
     <div>
-      <button @onclick="create" disabled=@error>Create</button>
-      <button @onclick="cancel">Cancel</button>
+      <button disabled=@(!isOk) @onclick='ok'>Ok</button>
+      <button disabled=@(!isOk) @onclick='apply'>Apply</button>
+      <button @onclick='cancel'>Cancel</button>
     </div>
   </div>
 </div>
 
 @* ######################################################################## *@
-@code{
-  TextField projectNameField;
-  TextField projectFile;
-  string selectedTemplate = "simioconsole";
+@code {
+  // -------------------------------------------------------------------------
+  [Parameter]
+  public string @class {get; set;}
 
   // -------------------------------------------------------------------------
-  string projectName => string.IsNullOrWhiteSpace(projectNameField?.value) ? "" : projectNameField.value.Trim();
+  ProjectManager.Settings settings = new ProjectManager.Settings();
+  DirectorySelector projectsDirectorySelector;
 
   // -------------------------------------------------------------------------
-  string projectFilePath => !string.IsNullOrWhiteSpace(projectName) ? $@"{ProjectManager.settings.projectsPath}\{projectName}\{projectName}.csproj" : "";
-
-  // -------------------------------------------------------------------------
-  string projectFilePathError {
+  bool modified => !ProjectManager.settings.deepEquals(settings);
+  bool error {
     get {
-      if (projectFilePath.IndexOfAny(Path.GetInvalidPathChars()) > 0 || projectName.IndexOfAny(Path.GetInvalidFileNameChars()) > 0) {
-        return "Invalid file name";
-      }
-      else if (Directory.Exists(Path.GetDirectoryName(projectFilePath))) {
-        return "Directory already exist";
-      }
-      else if (selectedTemplate == "simioblazor" && projectName.Length > 0 && !char.IsUpper(projectName[0])) {
-        return "Project name must start with a capital letter";
-      }
-      return null;
+      return projectsDirectorySelector == null ? false : projectsDirectorySelector.hasError;
     }
   }
+  bool isOk => modified;
 
   // -------------------------------------------------------------------------
-  bool error => String.IsNullOrEmpty(projectName) || projectFilePathError != null;
-
-  // -------------------------------------------------------------------------
-  void keyHandler(KeyboardEventArgs e)
-  {
-    if (e.Code == "Enter") {
-      create();
-    }
-  }
-
-  // -------------------------------------------------------------------------
-  void create()
+  void ok()
   {
     if (error)
       return;
-    ProjectManager.createProject(new NewProjectArgs() {
-      fileName = projectFilePath,
-      template = selectedTemplate
-    });
+    apply();
     window.Close();
+  }
+
+  // -------------------------------------------------------------------------
+  void apply()
+  {
+    if (error)
+      return;
+    ProjectManager.applySettings(settings.deepCopy());
   }
 
   // -------------------------------------------------------------------------
@@ -116,7 +102,8 @@
   }
 
   // -------------------------------------------------------------------------
-  void update()
+  [JSInvokable]
+  public void onChange()
   {
     InvokeAsync(StateHasChanged);
   }
@@ -124,13 +111,14 @@
   // -------------------------------------------------------------------------
   protected override void OnInitialized()
   {
+    settings = ProjectManager.settings.deepCopy();
     base.OnInitialized();
-    InvokeAsync(StateHasChanged);
-    window.Text = "Create New Project";
+    window.Text = "Settings";
     SimIO.onInput += (d, e) => {
       if (e.identifier == Keyboard.escape && e.position == 1) {
         cancel();
       }
     };
+    InvokeAsync(StateHasChanged);
   }
 }

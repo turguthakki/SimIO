@@ -54,7 +54,7 @@ using static th.SimIO.ProjectManager.ProjectManager;
 namespace th.SimIO.ProjectManager {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-static class ProjectManager
+static partial class ProjectManager
 {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   public class Settings : th.SimIO.ProjectManager.GlobalSettings
@@ -62,6 +62,13 @@ static class ProjectManager
     // -----------------------------------------------------------------------
     [JsonProperty("projectsPath")]
     string _projectsPath = null;
+
+    // -----------------------------------------------------------------------
+    public bool watchProjectDirectory = true;
+    public bool watchSubDirectories = true;
+    public string watchFilter = "*.cs;*.csproj";
+    public bool rebuildProjectsOnChange = true;
+    public bool runProjectsOnChange = true;
 
     // -----------------------------------------------------------------------
     [JsonIgnore]
@@ -85,21 +92,45 @@ static class ProjectManager
   }
 
   // -------------------------------------------------------------------------
-  public static void installSimIO()
+  public static Process installSimIO()
   {
-    ProcessUtils.runCommandInBackground("dotnet", "new -i SimIO");
+    return null;
+    // return ProcessUtils.runCommandInBackground("dotnet", "new -i SimIO");
   }
 
   // -------------------------------------------------------------------------
-  public static void initialize()
+  public static void applySettings(Settings newSettings)
+  {
+    shutdown();
+    settings = newSettings;
+    settings.save();
+    initialize();
+  }
+
+
+  // -------------------------------------------------------------------------
+  static void initialize()
   {
     new Thread(() => {
       settings.load();
       installSimIO();
-      Project.refreshProjectList();
+      refreshProjectList();
+      startProjectsWatcher();
       initialized = true;
       update();
     }).Start();
+  }
+
+  // -------------------------------------------------------------------------
+  static void shutdown()
+  {
+    foreach(Project p in projects) {
+      p.kill();
+      p.stopWatcher();
+    }
+    stopProjectsWatcher();
+    settings.save();
+    initialized = false;
   }
 
   // -------------------------------------------------------------------------
@@ -112,7 +143,7 @@ static class ProjectManager
     initialize();
 
     Application.Run(mainWindow);
-    settings.save();
+    shutdown();
   }
 }
 

@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------- *
 
-    * DirectorySelector.razor.css
+    * GeneralSettings.razor.css
 
     ----------------------------------------------------------------------
 
@@ -27,17 +27,34 @@
     Turgut Hakkı Özdemir <turgut.hakki@gmail.com>
 
 * ------------------------------------------------------------------------ */
-div.container {
+.container {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  overflow:hidden;
+  gap: 1em;
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.project-settings {
+  display: grid;
+  grid-template-columns: fit-content(0) auto;
+}
+
+div.dialog-response {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+div.dialog-response >:first-child {
   display: flex;
   flex-direction: row;
-}
-
-::deep .TextField {
-  /* width: 100%; */
-  flex-grow: 1;
-}
-
-button {
-  height: 2em;
-  width: 2em;
+  justify-content: flex-end;
+  gap: 0.5em;
 }

@@ -13,7 +13,7 @@
 }
 
 @font-face {
-  font-family: ConsoleFont;
+  font-family: LogFont;
   src: url(FixedsysX.woff);
 }
 
@@ -34,7 +34,6 @@ html {
 input, select {
   margin: 0.25em;
   padding: 0.25em;
-  height: 2em;
   border: none;
   border: 1px solid gray;
   color: black;
@@ -47,7 +46,6 @@ input, select {
 input[readonly], select[readonly] {
   margin: 0.25em;
   padding: 0.25em;
-  height: 2em;
   border: none;
   border: 1px solid gray;
   color: black;
@@ -57,8 +55,7 @@ input[readonly], select[readonly] {
   transition: var(--animation_one)
 }
 
-
-input:focus, select:focus {
+input:focus:not([readonly]), select:focus:not([readonly]) {
   outline: none !important;
   border: none;
   border: 1px solid black;
@@ -100,6 +97,10 @@ button:active:not([disabled]) {
   background-image: linear-gradient(180deg,#fafafa,#f0f0f0);
 }
 
+label {
+  white-space: nowrap;
+}
+
 .panel {
   background-color: var(--panel-background);
 }
@@ -109,7 +110,31 @@ button:active:not([disabled]) {
   margin : 6px;
   background-color: white;
   border-radius: 3px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  box-shadow: var(--shadow);
+}
+
+.card > label:first-child
+{
+  display: block;
+  font-size: smaller;
+  font-weight: bold;
+  background-color: #eaeaea;
+  padding: 0.25em;
+  border-radius: 3px;
+  margin-bottom: 0.5em;
+}
+
+div.property-page {
+  display: grid;
+  column-gap: 15px;
+  grid-template-columns: fit-content(0) auto;
+}
+
+div.property-page > label {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom: 0.5em;
 }
 
 div.input-error-message::before {
@@ -122,4 +147,31 @@ div.input-error-message::before {
   position: absolute;
   padding-top : 2.25em;
   padding-left : 0.5em;
+}
+
+.LogDisplay {
+  font-family: LogFont;
+  background-color: black;
+  padding: 10px;
+  margin : 6px;
+  border-radius: 3px;
+  box-shadow: var(--shadow);
+}
+
+.log-info {
+  color : gainsboro;
+}
+.log-warning {
+  color : orange;
+}
+.log-error {
+  color : red;
+}
+
+.project-building {
+  background-color: #edfff1;
+}
+
+.project-running {
+  background-color: #f2f0ff;
 }

@@ -1,6 +1,6 @@
 @* ----------------------------------------------------------------------- *
 
-    * SelectedProject.razor
+    * ProjectSettings.razor
 
     ----------------------------------------------------------------------
 
@@ -26,15 +26,26 @@
 
     Turgut Hakkı Özdemir <turgut.hakki@gmail.com>
 
-* ------------------------------------------------------------------------- *@
+* ------------------------------------------------------------------------ *@
 @namespace th.SimIO.ProjectManager
 
 @* ######################################################################## *@
-<div>
-  Selected Project
+<div ComponentName='@(GetType().Name)' class='@($"{@class} {GetType().Name} container") card' style="display: none;">
+
+  qwe qwe qweqwe  qweqweqwe
+
 </div>
 
 @* ######################################################################## *@
 @code {
+[Parameter]
+public string @class {get; set;}
 
+  // -------------------------------------------------------------------------
+  protected override void OnInitialized()
+  {
+    base.OnInitialized();
+    InvokeAsync(StateHasChanged);
+
+  }
 }

@@ -35,6 +35,9 @@
   height: 100%;
 }
 
+.active-item {
+}
+
 .list {
   display:flex;
   flex-direction: column;
@@ -48,4 +51,9 @@
   justify-content: flex-end;
   overflow: hidden;
   gap : 5px;
+}
+
+
+.actions > :first-child {
+  margin-right: auto;
 }

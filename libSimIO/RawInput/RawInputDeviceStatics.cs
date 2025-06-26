@@ -154,7 +154,7 @@ public partial class RawInputDevice
 
     foreach (var dev in deviceList) {
       string identifier = "rawinput:" + getDevicePath(dev.hDevice);
-      rv.Add(identifier, dev);
+      rv[identifier] = dev;
     }
 
     return rv;

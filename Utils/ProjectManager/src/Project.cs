@@ -40,6 +40,50 @@ public class Project
     public string runArguments;
     public Project project {get; private set;}
 
+    public bool clearConsoleOnBuild = true;
+    public bool clearConsoleOnRun = true;
+
+    // -----------------------------------------------------------------------
+    bool? _watchProjectDirectory;
+    public bool watchProjectDirectory {
+      get => _watchProjectDirectory ?? ProjectManager.settings.watchProjectDirectory;
+      set => _watchProjectDirectory = value;
+    }
+
+    // -----------------------------------------------------------------------
+    bool? _watchSubDirectories;
+    public bool watchSubDirectories {
+      get => _watchSubDirectories ?? ProjectManager.settings.watchSubDirectories;
+      set => _watchSubDirectories = value;
+    }
+
+    // -----------------------------------------------------------------------
+    string? _watchFilter;
+    public string watchFilter {
+      get => _watchFilter ?? ProjectManager.settings.watchFilter;
+      set => _watchFilter = value;
+    }
+
+    // -----------------------------------------------------------------------
+    bool? _rebuildProjectsOnChange;
+    public bool rebuildProjectsOnChange {
+      get => _rebuildProjectsOnChange ?? ProjectManager.settings.rebuildProjectsOnChange;
+      set => _rebuildProjectsOnChange = value;
+    }
+
+    // -----------------------------------------------------------------------
+    bool? _runProjectsOnChange;
+    public bool runProjectsOnChange {
+      get => _runProjectsOnChange ?? ProjectManager.settings.runProjectsOnChange;
+      set => _runProjectsOnChange = value;
+    }
+
+    // public bool watchSubDirectories = true;
+    // public string watchFilter = "*.cs;*.csproj";
+    // public bool rebuildProjectsOnChange = true;
+    // public bool runProjectsOnChange = true;
+
+
     // -----------------------------------------------------------------------
     public override string path => project.projectFolder + "\\.simio\\project.settings";
 
@@ -51,19 +95,15 @@ public class Project
   }
 
   // -------------------------------------------------------------------------
-  static List<Project> _projects = new List<Project>();
-
-  // -------------------------------------------------------------------------
-  public static IEnumerable<Project> projects => _projects;
-  public static event Action onProjectsChanged = delegate{};
-
-  // -------------------------------------------------------------------------
   public string name {get; private set;}
   public string projectFile {get; set;}
   public string projectFolder => Path.GetDirectoryName(projectFile);
   public Settings settings {get; private set;} = null;
   public System.Diagnostics.Process dotnetProcess {get; private set;}
   public event Action onStateChanged = delegate{};
+
+  public bool building {get; private set;}
+  public bool running {get; private set;}
 
   // -------------------------------------------------------------------------
   public Project(string projectFile, string templateName = "")
@@ -84,38 +124,57 @@ public class Project
   }
 
   // -------------------------------------------------------------------------
+  public void startWatcher()
+  {
+  }
+
+  // -------------------------------------------------------------------------
+  public void stopWatcher()
+  {
+  }
+
+  // -------------------------------------------------------------------------
   public void build()
   {
+    if (dotnetProcess != null && !dotnetProcess.HasExited) {
+      kill();
+    }
+    if (settings.clearConsoleOnBuild)
+      Log.clear();
+    building = true;
     dotnetProcess = ProcessUtils.runCommandInBackground("dotnet", "build " + settings.buildArguments, projectFolder);
-    dotnetProcess.Exited += (s,e) => onStateChanged();
+    dotnetProcess.Exited += (s,e) => {
+      building = false;
+      dotnetProcess = null;
+      onStateChanged();
+    };
+    onStateChanged();
   }
 
   // -------------------------------------------------------------------------
   public void run()
   {
-    dotnetProcess = ProcessUtils.runCommandInBackground("dotnet", "run " + settings.runArguments, projectFolder);
-    dotnetProcess.Exited += (s,e) => onStateChanged();
+    if (dotnetProcess != null && !dotnetProcess.HasExited) {
+      kill();
+    }
+    if (settings.clearConsoleOnRun)
+      Log.clear();
+    running = true;
+    dotnetProcess = ProcessUtils.runCommandInBackground("dotnet", "run " + settings.buildArguments, projectFolder);
+    dotnetProcess.Exited += (s,e) => {
+      running = false;
+      dotnetProcess = null;
+      onStateChanged();
+    };
+    onStateChanged();
   }
 
   // -------------------------------------------------------------------------
   public void kill()
   {
-    if (!dotnetProcess.HasExited) {
+    if (dotnetProcess != null && !dotnetProcess.HasExited) {
       dotnetProcess.Kill(true);
     }
-  }
-
-  // -------------------------------------------------------------------------
-  public static void refreshProjectList()
-  {
-    foreach(string dir in Directory.GetDirectories(ProjectManager.settings.projectsPath)) {
-      string projectFile = dir + "\\" + Path.GetFileName(dir) + ".csproj";
-      if (File.Exists(projectFile)) {
-        if (!_projects.Any(p => p.projectFile != projectFile))
-          _projects.Add(new Project(projectFile));
-      }
-    }
-    onProjectsChanged();
   }
 }
 

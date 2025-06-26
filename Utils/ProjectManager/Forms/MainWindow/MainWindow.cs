@@ -31,7 +31,7 @@
 namespace th.SimIO.ProjectManager {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class MainWindow : Window
+public class MainWindow : Window
 {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   class Settings : th.SimIO.ProjectManager.GlobalSettings

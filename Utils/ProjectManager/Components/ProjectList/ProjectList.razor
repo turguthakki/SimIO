@@ -32,11 +32,12 @@
 @* ######################################################################## *@
 <div class="container panel">
   <div class="list">
-    @foreach(Project project in Project.projects) {
-      <ProjectListItem project=@project/>
+    @foreach(Project project in ProjectManager.projects) {
+      <ProjectListItem project=@project projectList=@this/>
     }
   </div>
   <div class="actions card">
+    <button @onclick='showSettingsDialog'>⚙</button>
     <button @onclick="showNewProjectDialog">🗋</button>
     <button>🗑</button>
   </div>
@@ -45,7 +46,19 @@
 @* ######################################################################## *@
 @code {
   // -------------------------------------------------------------------------
-  void showNewProjectDialog()
+  public void showSettingsDialog()
+  {
+    Window window = new Window(typeof(SettingsDialog));
+    window.Width = 640;
+    window.Height = 480;
+    window.FormClosing += (s, e) => {
+      InvokeAsync(StateHasChanged);
+    };
+    mainWindow.showDialog(window);
+  }
+
+  // -------------------------------------------------------------------------
+  public void showNewProjectDialog()
   {
     Window window = new Window(typeof(NewProjectDialog));
     window.Width = 640;
@@ -61,9 +74,8 @@
   {
     base.OnInitialized();
     InvokeAsync(StateHasChanged);
-    Project.onProjectsChanged += () => {
+    ProjectManager.onProjectsChanged += () => {
       InvokeAsync(StateHasChanged);
     };
-    showNewProjectDialog();
   }
 }

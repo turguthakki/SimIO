@@ -1,0 +1,15 @@
+.container {
+  overflow-x: auto;
+  overflow-y: scroll;
+  display:flex;
+  flex-direction:column-reverse;
+}
+
+.logs {
+  padding: 5px;
+  flex-grow: 1;
+}
+
+.log-line {
+  white-space: pre;
+}

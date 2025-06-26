@@ -35,7 +35,7 @@ public class ProcessUtils
 {
 
   // -------------------------------------------------------------------------
-  public static System.Diagnostics.Process runCommandInBackground(string executable, string arguments = "", string workingDirectory = "", Dictionary<string, string> environmentVariables = null, bool createWindow = false)
+  public static System.Diagnostics.Process runCommandInBackground(string executable, string arguments = "", string workingDirectory = "", Dictionary<string, string> environmentVariables = null, bool createWindow = false, Action onExit = null)
   {
     System.Diagnostics.Process process = new System.Diagnostics.Process();
 
@@ -63,10 +63,16 @@ public class ProcessUtils
         ProjectManager.update();
     });
 
+    process.Exited += (s, e) => {
+      if (onExit != null) {
+        onExit();
+      }
+      ProjectManager.update();
+    };
+    process.EnableRaisingEvents = true;
     process.Start();
     process.BeginOutputReadLine();
     process.BeginErrorReadLine();
-    process.Exited += (s, e) => ProjectManager.update();
 
     return process;
   }
