@@ -42,7 +42,7 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include="..\License.txt" Pack="true" PackagePath=""/>
+    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
     <Content Include="vJoy\vJoyInterface.dll">
       <Pack>true</Pack>
       <PackagePath>runtimes\win-x64\native</PackagePath>
